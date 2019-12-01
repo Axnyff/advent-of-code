@@ -1,0 +1,5 @@
+BEGIN;
+
+WITH RECURSIVE t(v) AS (
+  VALUES ('dabAcCaCBAcCcaDA')
+
