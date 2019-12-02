@@ -8,7 +8,7 @@ BEGIN;
   \copy module(mass) from '1/input' with delimiter E' ';
 
   -- PART 1
-  SELECT sum((mass / 3) -2 ) from module;
+  SELECT sum((mass / 3) -2 ) as "Part 1" from module;
 
   -- PART 2
   WITH RECURSIVE fuel(n) AS (
@@ -16,5 +16,5 @@ BEGIN;
     UNION all
       SELECT (n / 3) - 2 from fuel where (n / 3) > 2
   )
-  SELECT sum(n) from fuel;
+  SELECT sum(n) as "Part 2" from fuel;
 
