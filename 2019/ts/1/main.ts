@@ -1,4 +1,5 @@
-const fs = require("fs");
+import { printResult } from '..';
+import fs from 'fs';
 
 fs.readFile("./1/input", (err: Error | null, rawData: Buffer) => {
   const data = rawData
@@ -23,4 +24,6 @@ fs.readFile("./1/input", (err: Error | null, rawData: Buffer) => {
     .map(mass => allFuel(mass))
     .reduce((acc, fuels) => ([...acc, ...fuels]), [])
     .reduce((total, fuel) => total + fuel, 0);
+
+  printResult(part1, part2);
 });
