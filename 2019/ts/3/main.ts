@@ -49,6 +49,7 @@ const part1 = (steps: [string, number][][]): number => {
 };
 
 const part2 = ([wire1, wire2]: [string, number][][]): number => {
+  let minDistance = Infinity;
   let wire1Position = [0, 0];
   let wire2Position = [0, 0];
 
@@ -57,30 +58,54 @@ const part2 = ([wire1, wire2]: [string, number][][]): number => {
   let it = 0;
   let wire1Steps = 0;
   let wire2Steps = 0;
-  while(true) {
-    for (let i = 0; i < wire1[it][1]; i++) {
-      wire1Steps++;
-      wire1Position = advance(wire1Position, wire1[it][0]);
-      if (wire2Points.has(`${wire1Position[0]}-${wire1Position[1]}`)) {
-        return wire1Steps + wire2Points.get(`${wire1Position[0]}-${wire1Position[1]}`);
-      } else {
-        wire1Points.set(`${wire1Position[0]}-${wire1Position[1]}`, wire1Steps);
+  while (true) {
+    if (it >= wire1.length && it >= wire2.length) {
+      break;
+    }
+    if (it < wire1.length) {
+      for (let i = 0; i < wire1[it][1]; i++) {
+        wire1Steps++;
+        wire1Position = advance(wire1Position, wire1[it][0]);
+        if (wire2Points.has(`${wire1Position[0]}-${wire1Position[1]}`)) {
+          const distance =
+            wire1Steps +
+            wire2Points.get(`${wire1Position[0]}-${wire1Position[1]}`);
+          if (distance < minDistance) {
+            minDistance = distance;
+          }
+        } else {
+          wire1Points.set(
+            `${wire1Position[0]}-${wire1Position[1]}`,
+            wire1Steps
+          );
+        }
       }
     }
-    for (let i = 0; i < wire2[it][1]; i++) {
-      wire2Steps++;
-      wire2Position = advance(wire2Position, wire2[it][0]);
-      if (wire1Points.has(`${wire2Position[0]}-${wire2Position[1]}`)) {
-        return wire2Steps + wire1Points.get(`${wire2Position[0]}-${wire2Position[1]}`);
-      } else {
-        wire2Points.set(`${wire2Position[0]}-${wire2Position[1]}`, wire2Steps);
+    if (it < wire2.length) {
+      for (let i = 0; i < wire2[it][1]; i++) {
+        wire2Steps++;
+        wire2Position = advance(wire2Position, wire2[it][0]);
+        if (wire1Points.has(`${wire2Position[0]}-${wire2Position[1]}`)) {
+          const distance =
+            wire2Steps +
+            wire1Points.get(`${wire2Position[0]}-${wire2Position[1]}`);
+          if (distance < minDistance) {
+            minDistance = distance;
+          }
+        } else {
+          wire2Points.set(
+            `${wire2Position[0]}-${wire2Position[1]}`,
+            wire2Steps
+          );
+        }
       }
     }
     it++;
   }
+  return minDistance;
 };
 
-fs.readFile(`${__dirname}/test-input`, (err: Error | null, rawData: Buffer) => {
+fs.readFile(`${__dirname}/input`, (err: Error | null, rawData: Buffer) => {
   const data = rawData
     .toString()
     .split("\n")
@@ -91,5 +116,5 @@ fs.readFile(`${__dirname}/test-input`, (err: Error | null, rawData: Buffer) => {
         .map(i => [i[0], parseInt(i.slice(1), 10)] as [string, number])
     );
 
-  console.log(part2(data));
+  printResult(part1(data), part2(data));
 });
