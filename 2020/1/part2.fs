@@ -1,0 +1,47 @@
+
+
+VARIABLE INDEX1
+VARIABLE INDEX2
+VARIABLE VALUE1
+VARIABLE VALUE2
+VARIABLE NBITEMS
+
+: CALC-NBITEMS
+  S" data.fs" INCLUDED
+  depth NBITEMS !
+  NBITEMS @ 0 DO DROP LOOP
+  ;
+
+CALC-NBITEMS
+
+
+: SOLVE
+
+  0 INDEX1 !
+  0 INDEX2 !
+  BEGIN
+    S" data.fs" INCLUDED
+    INDEX1 @ 0 ?DO DROP LOOP
+    VALUE1 !
+    INDEX2 @ 0 ?DO DROP LOOP
+    VALUE2 !
+
+    BEGIN
+      DUP
+      VALUE1 @
+      VALUE2 @
+      + +
+      2020 =
+      IF
+        VALUE1 @
+        VALUE2 @
+        * * . CR BYE
+      THEN DROP
+      depth 0= UNTIL
+
+  INDEX2 @ 1+ INDEX2 !
+  INDEX1 @ INDEX2 @  + 2 + NBITEMS @ = IF
+    0 INDEX2 !
+    INDEX1 @ 1+ INDEX1 ! THEN
+  0 UNTIL ;
+SOLVE

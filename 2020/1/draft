@@ -1,0 +1,16 @@
+(: SOLVE
+  300 0 DO
+    300 0 DO
+      S" data-bis.fs" INCLUDED
+      I -1 DO DROP LOOP
+      >r
+      J -1 DO DROP LOOP
+      >r
+      R@ .
+      R@ .
+
+      BEGIN DUP R@ R@ + + 2020 = 
+        IF R@ R@ * . CR BYE 
+        ELSE DROP THEN depth 0= UNTIL DROP
+  LOOP LOOP ;
+SOLVE)

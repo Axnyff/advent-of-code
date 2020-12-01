@@ -1,0 +1,12 @@
+: FIND-NUMBER
+  >r
+  BEGIN 
+  DUP R@ + 2020 = IF R@ * . CR BYE ELSE DROP THEN depth 0= UNTIL r> DROP ;
+
+: SOLVE
+  300 0 DO
+    S" data.fs" INCLUDED
+    I -1 DO DROP LOOP
+    FIND-NUMBER
+  LOOP ;
+SOLVE
