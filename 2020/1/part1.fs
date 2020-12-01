@@ -6,7 +6,7 @@
 : SOLVE
   300 0 DO
     S" data.fs" INCLUDED
-    I -1 DO DROP LOOP
+    I 0 ?DO DROP LOOP
     FIND-NUMBER
   LOOP ;
 SOLVE
