@@ -1,0 +1,2 @@
+Of course \d doest not work in sed so we will have to make an even more horrible script
+by replacing it with [0-9]

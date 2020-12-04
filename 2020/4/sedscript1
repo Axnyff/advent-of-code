@@ -1,0 +1,13 @@
+:a
+$!N
+s/\n(.+)/\1/ 
+ta
+
+s/\n//
+/byr/!d
+/iyr/!d
+/eyr/!d
+/hgt/!d
+/hcl/!d
+/ecl/!d
+/pid/!d
