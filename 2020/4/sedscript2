@@ -1,5 +1,5 @@
 :subst
-$!N
+N
 s/\n(.+)/ \1/ 
 t subst
 
