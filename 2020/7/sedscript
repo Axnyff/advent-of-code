@@ -1,0 +1,15 @@
+/no other bags/ {
+  s/(.+) bags contain.+/contains(\1,[]/
+}
+
+/contain [0-9]/ {
+  s/(.+) bags contain /contains(\1,[/
+  :sub-item
+
+  s/([0-9]+) ([^,]+?) bags?, /[\1,\2],/g
+  t sub-item
+  s/([0-9]+) ([^,]+?) bags?./[\1,\2]]/g
+}
+
+s/\s/_/g
+s/$/)./
