@@ -60,6 +60,7 @@ Perfect!
 
 what labels on loops do not work ?
 yeah I'm gonna use goto!
+https://xkcd.com/292/
 
 using goto as a continue is actually very error prone:
 if you set your label before, you'll restart your loop everytime.
