@@ -1,27 +1,25 @@
 import java.io.File
 
 fun main() {
-  val lines = File("test-data").readLines()
+  val lines = File("input").readLines()
 
   val items = lines.elementAt(1).split(",")
     .mapIndexed({ index, item -> Pair(index, item)})
     .filter({ (_, item) -> item != "x"})
-    .map({ (index, item) -> Pair(index, item.toInt())})
+    .map({ (index, item) -> Pair(index.toLong(), item.toLong())})
 
 
-  val max = items.map( { (_, item) -> item}).maxOrNull()
-  val (index, item) = items.find({ (_, item) -> item == max}) ?: Pair(0, 0)
+  var result: Long = 1
+  var step: Long = 1
 
-
-  val start = 100000000000000
-  var i = start + (start % item) - index
-  while (true) {
-    if (items.all( { (index, item) -> (i + index) % item == 0})) {
-      break
+  for ((index, id) in items) {
+    while ((result + index)% id != 0L) {
+      result += step;
     }
-    i += item
+    step *= id;
   }
-  println(i)
+  println(result);
+
 }
 
 /* t = 7k */
