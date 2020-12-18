@@ -1,19 +1,17 @@
 import re
 
 def tokenize(input_str):
-    modified_str = "(((("
+    modified_str = "(("
     for char in input_str.strip():
         if char == "(":
-            modified_str += "(((("
+            modified_str += "(("
         elif char == ")":
-            modified_str += "))))"
-        elif char == "+":
-            modified_str += "))+(("
+            modified_str += "))"
         elif char == "*":
-            modified_str += ")))*((("
+            modified_str += ")*("
         else:
             modified_str += char
-    modified_str += "))))"
+    modified_str += "))"
     return re.findall(r'(\d+|[*+()])', modified_str)
 
 class Evaluator: 
