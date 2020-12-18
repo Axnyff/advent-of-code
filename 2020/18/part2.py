@@ -45,7 +45,7 @@ class Evaluator:
         return firstValue
 
 
-with open("test-input", "r+") as f:
+with open("input", "r+") as f:
     total = 0
     for line in f.readlines():
         total += Evaluator(line).evaluate()
