@@ -1,125 +1,79 @@
-const fs = require("fs");
-
-const data = fs.readFileSync("input").toString().split("\n");
-
-
-let tiles = [];
-let content = [];
-let tileId;
-
-for (const line of data) {
-  if (line == "") {
-    tiles.push({
-      id: parseInt(tileId, 10),
-      content,
-    });
-    content = [];
-    continue;
-  }
-  if (line.startsWith("Tile")) {
-    tileId = line.match(/Tile (\d+)/)[1];
-  } else {
-    content.push(line.split(""));
-  }
+"use strict";
+var fs = require("fs");
+var data = fs.readFileSync("input").toString().split("\n");
+var getBorders = function (content) {
+    return {
+        top: content[0].join(""),
+        bottom: content[content.length - 1].join(""),
+        left: content.map(function (el) { return el[0]; }).join(""),
+        right: content.map(function (el) { return el[el.length - 1]; }).join("")
+    };
+};
+var tiles = [];
+var content = [];
+var tileId;
+for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+    var line = data_1[_i];
+    if (line == "") {
+        tiles.push({
+            id: parseInt(tileId, 10),
+            content: content,
+            borders: Object.values(getBorders(content))
+        });
+        content = [];
+        continue;
+    }
+    if (line.startsWith("Tile")) {
+        tileId = line.match(/Tile (\d+)/)[1];
+    }
+    else {
+        content.push(line.split(""));
+    }
 }
-
-const getBorders = (content) => {
-  const borders = [];
-  // top
-  borders.push(content[0].join(""));
-  // bottom
-  borders.push(content[content.length - 1].join(""));
-  // left
-  borders.push(content.map((el) => el[0]).join(""));
-  // right
-  borders.push(content.map((el) => el[el.length - 1]).join(""));
-
-  return borders;
-};
-
-tiles = tiles.map((tile) => ({borders: getBorders(tile.content), ...tile}));
-let mult = 1;
-const corners = tiles.filter((currentTile) => {
-  let matchingTiles = tiles.filter((tile) => {
-    if (tile.id === currentTile.id) {
-      return false;
-    }
-    return tile.borders.some(
-      (border) =>
-        currentTile.borders.includes(border) ||
-        currentTile.borders.includes(border.split("").reverse().join(""))
-    );
-  });
-  return matchingTiles.length === 2;
+var corner = tiles.find(function (currentTile) {
+    var matchingTiles = tiles.filter(function (tile) {
+        if (tile.id === currentTile.id) {
+            return false;
+        }
+        return tile.borders.some(function (border) {
+            return currentTile.borders.includes(border) ||
+                currentTile.borders.includes(border.split("").reverse().join(""));
+        });
+    });
+    return matchingTiles.length === 2;
 });
-
-const borderTiles = tiles.filter((currentTile) => {
-  let matchingTiles = tiles.filter((tile) => {
-    if (tile.id === currentTile.id) {
-      return false;
-    }
-    return tile.borders.some(
-      (border) =>
-        currentTile.borders.includes(border) ||
-        currentTile.borders.includes(border.split("").reverse().join(""))
-    );
-  });
-  return matchingTiles.length === 3;
+var otherTiles = tiles.filter(function (_a) {
+    var id = _a.id;
+    return id !== corner.id;
 });
-
-const middleTiles = tiles.filter((currentTile) => {
-  let matchingTiles = tiles.filter((tile) => {
-    if (tile.id === currentTile.id) {
-      return false;
+var rotate = function (arr) { return arr[0].map(function (_, colIndex) { return arr.map(function (row) { return row[row.length - 1 - colIndex]; }); }); };
+var flipHorizontal = function (arr) {
+    return arr.map(function (line) { return line.map(function (_, i) { return line[line.length - i - 1]; }); });
+};
+var getPermutations = function (content) {
+    var permutations = [content];
+    permutations = permutations.flatMap(function (el) { return [el, rotate(el), rotate(rotate(el)), rotate(rotate(rotate(el)))]; });
+    permutations = permutations.flatMap(function (el) { return [el, flipHorizontal(el)]; });
+    return permutations;
+};
+var printTiles = function (content) {
+    console.log(content.map(function (el) { return el.join(''); }).join('\n'));
+    console.log("\n\n");
+};
+var map = Array.from({ length: 5 }, function (_) { return Array.from({ length: 29 }); });
+var cornerPermutations = getPermutations(corner.content);
+console.log(cornerPermutations.filter(function (perm) {
+    var allBorders = getBorders(perm);
+    var borders = [allBorders.right, allBorders.bottom];
+    var matchingTiles = otherTiles.filter(function (tile) {
+        return Object.values(getBorders(tile.content)).some(function (border) {
+            return borders.includes(border) ||
+                borders.includes(border.split("").reverse().join(""));
+        });
+    });
+    console.log(matchingTiles.length);
+    if (matchingTiles.length === 2) {
+        matchingTiles.forEach(function (el) { return printTiles(el.content); });
     }
-    return tile.borders.some(
-      (border) =>
-        currentTile.borders.includes(border) ||
-        currentTile.borders.includes(border.split("").reverse().join(""))
-    );
-  });
-  return matchingTiles.length === 4;
-});
-
-const rotate = arr => arr[0].map((_, colIndex) => arr.map(row => row[row.length - 1 - colIndex]));
-
-const flipHorizontal = (arr) =>
-  arr.map(line => line.map((_, i) => line[line.length - i - 1]));
-
-const getPermutations = (content) => {
-  let permutations = [content];
-  permutations = permutations.flatMap(el => [el, rotate(el), rotate(rotate(el)), rotate(rotate(rotate(el)))])
-  permutations = permutations.flatMap(el => [el, flipHorizontal(el)])
-
-  return permutations;
-};
-
-const printTiles = content => {
-  console.log(content.map(el => el.join('')).join('\n'));
-  console.log("\n\n");
-};
-
-
-const map = Array.from({ length: 5 }, _ => Array.from({ length: 29}))
-
-const cornerPermutations = getPermutations(corners[0].content);
-
-console.log(cornerPermutations.filter(perm => {
-  const allBorders = getBorders(perm);
-  const borders = [allBorders[1], allBorders[3]];
-  let matchingTiles = borderTiles.filter((tile) => {
-    return tile.borders.some(
-      (border) =>
-        borders.includes(border) ||
-        borders.includes(border.split("").reverse().join(""))
-    );
-  });
-  console.log(matchingTiles.length);
-  if (matchingTiles.length === 2) {
-    matchingTiles.forEach(el => printTiles(el.content))
-  }
-
-  return matchingTiles.length === 2;
-
+    return matchingTiles.length === 2;
 }).length);
-
