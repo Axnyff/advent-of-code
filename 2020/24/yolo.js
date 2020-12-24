@@ -48,9 +48,6 @@ const nextStep = (data) => {
     const splitted = el.split(',');
     return [parseFloat(splitted[0]), parseFloat(splitted[1])];
   });
-  console.log(candidates.length);
-  console.log(candidates);
-
   return candidates.filter(el => {
     const neighbourCount = getNeighbours(el).map(el => el.join(',')).filter(nei => stringifiedData.includes(nei)).length;
     if (stringifiedData.includes(el.join(','))) {
@@ -61,9 +58,8 @@ const nextStep = (data) => {
 
 };
 
-for (let i = 0; i < 1; i++) {
+for (let i = 0; i < 100; i++) {
   remaining = nextStep(remaining);
+  console.log(remaining.length);
 }
-
-console.log(JSON.stringify(remaining));
 
