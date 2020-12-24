@@ -1,7 +1,7 @@
 jq -n  --rawfile data test-input -f part1.jq \
   | jq -s "group_by(.) | [.[] | select(length %2 != 0)] | .[][0]" \
-  | jq -s ' . as $items
-  |
+  | jq -s ' {i: 0, items: .} | while(.i < 100; .items as $items | .i as $i
+  | $items |
   map([
     [.[0], .[1]],
     [.[0], .[1] + 1],
@@ -24,4 +24,4 @@ jq -n  --rawfile data test-input -f part1.jq \
           ($neighbours | map(select(. as $neigh | $items | (map(select(. == $neigh))) | length > 0)) | length) == 2
         else
           ($neighbours | map(select(. as $neigh | $items | (map(select(. == $neigh))) | length > 0)) | length) | . == 1 or . == 2
-        end)) | length'
+        end)) | {items: ., i: ($i + 1)}) | .items | length'
