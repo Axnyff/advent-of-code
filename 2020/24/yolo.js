@@ -1,6 +1,6 @@
 const fs = require("fs");
 const data = fs
-  .readFileSync("test-input")
+  .readFileSync("input")
   .toString()
   .split("\n")
   .filter((el) => el !== "");
@@ -60,6 +60,6 @@ const nextStep = (data) => {
 
 for (let i = 0; i < 100; i++) {
   remaining = nextStep(remaining);
-  console.log(remaining.length);
 }
+console.log(remaining.length);
 
