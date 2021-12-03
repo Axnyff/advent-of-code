@@ -4,7 +4,7 @@ BEGIN;
     amount INT
   );
 
-  \copy instruction(direction, amount) from 'input' with delimiter E' ';
+  \copy instruction(direction, amount) from 'test-input' with delimiter E' ';
 
   -- PART 1
   SELECT

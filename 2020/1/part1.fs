@@ -31,7 +31,7 @@ R@
   THEN
 
 \ we keep that loop while there is some items in the stack
-depth 0= UNTIL 
+depth 0= UNTIL
 
 \ manual garbage collection
 \ we put the item on the return stack back to the main stack and then drop it
