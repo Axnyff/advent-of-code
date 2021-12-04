@@ -87,13 +87,18 @@ function Solve()
   let l:index = 0
   while v:true
     let l:col = l:nums[0:index]
-    for hand in hands
-      let l:win = IsWinning(hand, l:col)
+    let l:i = len(hands) - 1
+    while i >= 0
+      let l:win = IsWinning(hands[i], l:col)
       if l:win != 0
-        echom l:win * l:nums[index]
-        return
+        call remove(hands, i)
+        if (len(hands) == 0)
+          echom l:win * l:nums[index]
+          return
+        endif
       endif
-    endfor
+      let i = i - 1
+    endwhile
     let l:index = l:index + 1
   endwhile
 endfunction
