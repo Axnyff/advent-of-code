@@ -1,5 +1,11 @@
 1. Forth
 2. SQL
+3. Vim
+5. Bash
+6. Tcl
+7. Perl
+8. Prolog
+9. C
 10. Rust
 11. Go
 12. Erlang
