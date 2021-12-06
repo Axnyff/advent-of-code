@@ -3,3 +3,4 @@
 3. Forth / Go
 4. Vimscript
 5. Python
+6. Jq
