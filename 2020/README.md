@@ -3,8 +3,8 @@
 3. Vim
 5. Bash
 6. Tcl
-7. Perl
-8. Prolog
+7. Prolog
+8. Perl
 9. C
 10. Rust
 11. Go
