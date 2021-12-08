@@ -4,3 +4,5 @@
 4. Vimscript
 5. Python
 6. Jq
+7. Prolog
+8. Awk
