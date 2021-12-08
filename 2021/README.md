@@ -1,8 +1,8 @@
-1. Clojure
-2. SQL
-3. Forth / Go
-4. Vimscript
-5. Python
-6. Jq
-7. Prolog
-8. Awk
+1. [Clojure](https://github.com/Axnyff/advent-of-code/tree/master/2021/1)
+2. [SQL](https://github.com/Axnyff/advent-of-code/tree/master/2021/2)
+3. [Forth / Go](https://github.com/Axnyff/advent-of-code/tree/master/2021/3)
+4. [Vimscript](https://github.com/Axnyff/advent-of-code/tree/master/2021/4)
+5. [Python](https://github.com/Axnyff/advent-of-code/tree/master/2021/5)
+6. [Jq](https://github.com/Axnyff/advent-of-code/tree/master/2021/6)
+7. [Prolog](https://github.com/Axnyff/advent-of-code/tree/master/2021/7)
+8. [Awk](https://github.com/Axnyff/advent-of-code/tree/master/2021/8)
