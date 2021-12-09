@@ -20,8 +20,8 @@ l := Dictionary new.
 
 
 total := 0
-1 to: N1 do: [:i |
-  1 to: N2 do: [:j |
+2 to: 2 do: [:i |
+  1 to: 1 do: [:j |
     arr := Array new: 2.
     arr at: 1 put: i.
     arr at: 2 put: j.
@@ -31,17 +31,21 @@ total := 0
     'Value : ' print.
     value printNl.
 
-    arr at: 1 put: (i + 1).
-    down := l at: arr ifAbsent: [10].
+    arrD := Array new: 2.
+    arrD at: 1 put: (i + 1).
+    arrD at: 2 put: j.
+    down := l at: arrD ifAbsent: [10].
 
     'Value : ' print.
     value printNl.
 
-    arr at: 1 put: (i - 1).
+    arrU := Array new: 2.
+    arrU at: 1 put: (i - 1).
+    arrU at: 2 put: j.
+    up := l at: arrU ifAbsent: [].
 
     'Value : ' print.
     value printNl.
-    "up := l at: arr ifAbsent: []."
 
     'Value : ' print.
     value printNl.
