@@ -19,22 +19,25 @@ l := Dictionary new.
   ].
 ].
 
-l printNl.
-
 total := 0
 1 to: N1 do: [:i |
   1 to: N2 do: [:j |
 
     value := l at: (getKey value: i value: j).
-    value printNl.
+    value print.
 
     down := l at: (getKey value: (i + 1) value: j) ifAbsent: [10].
-    up := l at: (getKey value: (i - 1) value: j) ifAbsent: [10].
+    value print.
+    yolo := l at: (getKey value: (i - 1) value: j) ifAbsent: [10].
+    value print.
     right := l at: (getKey value: i value: (j + 1)) ifAbsent: [10].
+    value print.
     left := l at: (getKey value: i value: (j - 1)) ifAbsent: [10].
 
+    value printNl.
 
-    test := (value < left) & (value < right) & (value < up) & (value < down).
+
+    test := (value < left) & (value < right) & (value < yolo) & (value < down).
     test ifTrue: [
       "'value : ' print.
       value print.
