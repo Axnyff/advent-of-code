@@ -6,3 +6,4 @@
 6. [Jq](https://github.com/Axnyff/advent-of-code/tree/master/2021/6)
 7. [Prolog](https://github.com/Axnyff/advent-of-code/tree/master/2021/7)
 8. [Awk](https://github.com/Axnyff/advent-of-code/tree/master/2021/8)
+9. [Kotlin](https://github.com/Axnyff/advent-of-code/tree/master/2021/9)
