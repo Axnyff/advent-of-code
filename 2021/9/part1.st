@@ -6,53 +6,33 @@ N1 := lines size.
 
 N2 := (lines at: 1) size.
 
+getKey := [:i :j |
+  (i displayString), '-', (j displayString)
+].
+
 l := Dictionary new.
 1 to: N1 do: [:i |
   1 to: N2 do: [:j |
     line := lines at: i.
     char := line at: j.
-    arr := Array new: 2.
-    arr at: 1 put: i.
-    arr at: 2 put: j.
-    l at: arr put: ((char displayString) asNumber).
+    l at: (getKey value: i value: j) put: ((char displayString) asNumber).
   ].
 ].
 
+l printNl.
 
 total := 0
 1 to: N1 do: [:i |
   1 to: N2 do: [:j |
-    arr := Array new: 2.
-    arr at: 1 put: i.
-    arr at: 2 put: j.
 
-    value := l at: arr.
-    value := value + 0.
-    'value : ' print.
+    value := l at: (getKey value: i value: j).
     value printNl.
 
-    arrD := Array new: 2.
-    arrD at: 1 put: (i + 1).
-    arrD at: 2 put: j.
-    down := l at: arrD ifAbsent: [10].
-    'value : ' print.
-    value printNl.
+    down := l at: (getKey value: (i + 1) value: j) ifAbsent: [10].
+    up := l at: (getKey value: (i - 1) value: j) ifAbsent: [10].
+    right := l at: (getKey value: i value: (j + 1)) ifAbsent: [10].
+    left := l at: (getKey value: i value: (j - 1)) ifAbsent: [10].
 
-    arrU := Array new: 2.
-    arrU at: 1 put: (i - 1).
-    arrU at: 2 put: j.
-    up := l at: arrU ifAbsent: [10].
-
-
-    arrR := Array new: 2.
-    arrR at: 1 put: i.
-    arrR at: 2 put: (j + 1).
-    right := l at: arrR ifAbsent: [10].
-
-    arrL := Array new: 2.
-    arrL at: 1 put: i.
-    arrL at: 2 put: (j - 1).
-    left := l at: arrL ifAbsent: [10].
 
     test := (value < left) & (value < right) & (value < up) & (value < down).
     test ifTrue: [
