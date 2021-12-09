@@ -10,46 +10,33 @@ getKey := [:i :j |
   (i displayString), '-', (j displayString)
 ].
 
-l := Dictionary new.
+dico := Dictionary new.
 1 to: N1 do: [:i |
   1 to: N2 do: [:j |
     line := lines at: i.
     char := line at: j.
-    l at: (getKey value: i value: j) put: ((char displayString) asNumber).
+    dico at: (getKey value: i value: j) put: ((char displayString) asNumber).
   ].
 ].
 
 total := 0
-1 to: N1 do: [:i |
-  1 to: N2 do: [:j |
+1 to: 5 do: [:i |
+  1 to: 5 do: [:j |
 
-    value := l at: (getKey value: i value: j).
-    value print.
+    key := (getKey value: i value: j).
 
-    down := l at: (getKey value: (i + 1) value: j) ifAbsent: [10].
+    yoloooo := dico at: key.
+    yoloooo print.
+    key print.
+
+
     yolo := 1.
-    value print.
-    yolo := l at: (getKey value: (i - 1) value: j) ifAbsent: [10].
-    value print.
-    right := l at: (getKey value: i value: (j + 1)) ifAbsent: [10].
-    value print.
-    left := l at: (getKey value: i value: (j - 1)) ifAbsent: [10].
+    "left := 3."
 
-    value printNl.
+    yoloooo := dico at: key.
+    (dico at: key) printNl.
+    yoloooo printNl.
 
 
-    test := (value < left) & (value < right) & (value < yolo) & (value < down).
-    test ifTrue: [
-      "'value : ' print.
-      value print.
-      ' ' print.
-      left print.
-      ' ' print.
-      right print.
-      j printNl."
-      total := ((total + value) + 1).
-    ].
   ].
 ].
-
-total printNl.
