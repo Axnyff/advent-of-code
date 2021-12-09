@@ -27,6 +27,7 @@ total := 0
     value print.
 
     down := l at: (getKey value: (i + 1) value: j) ifAbsent: [10].
+    yolo := 1.
     value print.
     yolo := l at: (getKey value: (i - 1) value: j) ifAbsent: [10].
     value print.
