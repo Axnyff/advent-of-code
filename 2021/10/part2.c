@@ -58,7 +58,7 @@ long getCompleteScore(char *orders) {
 }
 
 //STOLEN
-long compare( const void* a, const void* b)
+int compare( const void* a, const void* b)
 {
      long int_a = * ( (long*) a );
      long int_b = * ( (long*) b );
