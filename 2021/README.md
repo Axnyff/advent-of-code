@@ -7,3 +7,6 @@
 7. [Prolog](https://github.com/Axnyff/advent-of-code/tree/master/2021/7)
 8. [Awk](https://github.com/Axnyff/advent-of-code/tree/master/2021/8)
 9. [Kotlin](https://github.com/Axnyff/advent-of-code/tree/master/2021/9)
+10. [C](https://github.com/Axnyff/advent-of-code/tree/master/2021/10)
+11. [Rust](https://github.com/Axnyff/advent-of-code/tree/master/2021/11)
+12. [Php](https://github.com/Axnyff/advent-of-code/tree/master/2021/12)
