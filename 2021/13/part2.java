@@ -64,7 +64,7 @@ class Part1 {
             }
           }
         }
-        yMax = position - 1;
+        yMax = position;
       } else {
         for (int i = position + 1; i <= xMax; i++) {
           for (int j = 0; j <= yMax; j++) {
@@ -74,15 +74,15 @@ class Part1 {
             }
           }
         }
-        xMax = position + 1;
+        xMax = position;
       }
 
 
-      break;
+      lineIndex++;
     }
 
-    for (int i = 0; i < xMax; i++) {
-      for (int j = 0; j < yMax; j++) {
+    for (int j = 0; j <= yMax; j++) {
+      for (int i = 0; i <= xMax; i++) {
         if (dots.containsKey(buildKey(i, j))) {
           System.out.print("#");
         } else {
@@ -91,7 +91,5 @@ class Part1 {
       }
       System.out.println("");
     }
-
-    System.out.println(dots.size());
   }
 }
