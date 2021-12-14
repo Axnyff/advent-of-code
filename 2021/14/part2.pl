@@ -1,4 +1,3 @@
-use POSIX;
 use warnings;
 use strict;
 no warnings ('substr');
@@ -16,6 +15,7 @@ while(<FH>) {
 }
 close(FH);
 my $input = shift @lines;
+my $last = substr $input, -1;
 $input =~ s/\s//;
 
 shift @lines;
@@ -51,14 +51,12 @@ my $min = 9 ** 9 ** 9;
 my $max = 0;
 
 
-my %real_counts = ();
+my %real_counts = ($last, 1);
 
 foreach(keys %counts) {
   my $left = substr($_, 0, 1);
-  my $right = substr($_, 1, 2);
   my $value = $counts{$_};
   $real_counts{$left} = exists($real_counts{$left}) ? $real_counts{$left} + $value : $value;
-  $real_counts{$right} = exists($real_counts{$right}) ? $real_counts{$right} + $value : $value;
 }
 
 
@@ -72,4 +70,4 @@ foreach(keys %real_counts) {
   }
 }
 
-print ceil(($max - $min) / 2) . "\n";
+print $max - $min . "\n";
