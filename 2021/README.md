@@ -12,3 +12,4 @@
 12. [Php](https://github.com/Axnyff/advent-of-code/tree/master/2021/12)
 13. [Java](https://github.com/Axnyff/advent-of-code/tree/master/2021/13)
 14. [Perl](https://github.com/Axnyff/advent-of-code/tree/master/2021/14)
+15. [Lua](https://github.com/Axnyff/advent-of-code/tree/master/2021/15)
