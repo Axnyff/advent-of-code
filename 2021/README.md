@@ -14,3 +14,7 @@
 14. [Perl](https://github.com/Axnyff/advent-of-code/tree/master/2021/14)
 15. [Lua](https://github.com/Axnyff/advent-of-code/tree/master/2021/15)
 16. [Tcl](https://github.com/Axnyff/advent-of-code/tree/master/2021/16)
+
+Remaining:
+Julia, Erlang, Bash, Javascript, Racket, Scala
+SmallTalk, Haskell, Ruby, Swift, R, Groovy, Dart, Nim
