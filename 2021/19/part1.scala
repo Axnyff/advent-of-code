@@ -82,10 +82,6 @@ object Part1 {
         if (transformation.isDefined) {
 
           val newScanner = scanners(i).map(item => applyTransFormation(item, transformation.get)).sorted
-          println("NEW SCANNER\n")
-          newScanner.foreach(println)
-          println(newScanner)
-          println("\n\n\n")
           correctScanners = correctScanners :+ newScanner
           scanners = scanners.take(i) ++ scanners.drop(i + 1)
         }
