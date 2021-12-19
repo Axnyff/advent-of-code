@@ -58,6 +58,7 @@ object Part1 {
     scanners = scanners.drop(1)
 
     var i = 0
+    var count = 0
 
     while (scanners.nonEmpty) {
       for (i <- scanners.length - 1 to 0 by -1) {
@@ -76,14 +77,22 @@ object Part1 {
             }
           }
           (items.groupBy(identity).mapValues(_.size).toSeq.filter(_._2 >= 12)).headOption.map {
-            case ((x, y, z, index), count) => ((x, y, z), index)
+            case ((x, y, z, index), count) => (((x, y, z), index), scanner)
           }
         }.headOption
         if (transformation.isDefined) {
+          val allItems = transformation.get._2
+          val newScanner = scanners(i).map(item => applyTransFormation(item, transformation.get._1)).sorted
 
-          val newScanner = scanners(i).map(item => applyTransFormation(item, transformation.get)).sorted
-          correctScanners = correctScanners :+ newScanner
-          scanners = scanners.take(i) ++ scanners.drop(i + 1)
+          val newScannerTemp = (0 to 23).map(i => newScanner.map(item => rotations(item)(i))).sortBy(items =>
+              items.filter(allItems.contains(_)).length).last.sorted
+          val correctCount = newScannerTemp.filter(allItems.contains(_)).length
+          if (correctCount != 0) {
+            correctScanners = correctScanners :+ newScannerTemp
+            scanners = scanners.take(i) ++ scanners.drop(i + 1)
+            count += 1
+          }
+
         }
       }
     }
