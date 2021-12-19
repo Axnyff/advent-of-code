@@ -86,8 +86,6 @@ object Part1 {
         }
       }
     }
-    var allItems = scanners(0)
-
     def getPath(currentPath: Seq[Int]): Seq[Int] = {
       if (map.get(currentPath.last).exists(_.contains(0))) {
         return currentPath :+ 0
@@ -103,10 +101,11 @@ object Part1 {
       return Seq.empty
     }
 
+    var allItems = Seq((0, 0, 0))
     for (i <- 1 to scanners.length - 1) {
       val path = getPath(Seq(i))
       var pos = i
-      var newItems = scanners(i)
+      var newItems = Seq((0, 0, 0))
       for (segment <- path.drop(1)) {
         val target = map.get(pos).get.get(segment).get
         pos = segment
@@ -114,7 +113,18 @@ object Part1 {
       }
       allItems = allItems ++ newItems
     }
-
-    println(allItems.distinct.length)
+    var max = 0
+    for (i <- 0 to allItems.length -1) {
+      for (j <- 0 to allItems.length -1) {
+        val (x, y, z) = allItems(i)
+        val (x2, y2, z2) = allItems(j)
+        val value = Math.abs(x - x2) + Math.abs(y - y2) + Math.abs(z - z2)
+        if (value > max) {
+          max = value;
+        }
+      }
+    }
+    println(max);
   }
+
 }
