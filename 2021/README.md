@@ -16,6 +16,7 @@
 16. [Tcl](https://github.com/Axnyff/advent-of-code/tree/master/2021/16)
 17. [Ruby](https://github.com/Axnyff/advent-of-code/tree/master/2021/17)
 18. [Javascript](https://github.com/Axnyff/advent-of-code/tree/master/2021/18)
+19. [Scala](https://github.com/Axnyff/advent-of-code/tree/master/2021/19)
 
 Remaining:
 Julia, Erlang, Bash, Racket, Scala
