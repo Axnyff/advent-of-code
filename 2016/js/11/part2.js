@@ -56,10 +56,7 @@ explored.add(stringifyState(floors, 0));
 let done = false;
 while (!done) {
   iter++;
-  console.log(iter);
   let newtoexplore = new Set();
-  console.log(toexplore.size);
-  console.log(explored.size);
   for (let key of toexplore) {
     explored.add(key);
     const [state, elevator] = JSON.parse(key);
