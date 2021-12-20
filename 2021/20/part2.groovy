@@ -99,7 +99,7 @@ def compute(imageData, translation) {
   return imageDataTemp
 }
 
-def nbLoops = 1 
+def nbLoops = 25 
 (0..nbLoops - 1).each {
   def rowmin
   def rowmax
