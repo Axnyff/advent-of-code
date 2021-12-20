@@ -19,5 +19,5 @@
 19. [Scala](https://github.com/Axnyff/advent-of-code/tree/master/2021/19)
 
 Remaining:
-Julia, Erlang, Bash, Racket, Scala
+Julia, Erlang, Bash, Racket
 SmallTalk, Haskell, Swift, R, Groovy, Dart, Nim
