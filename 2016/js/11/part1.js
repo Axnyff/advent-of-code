@@ -44,7 +44,7 @@ let elevator = 0;
 const solutions = {};
 const seen = {};
 
-const printState = (state, elevator, context = "") => {
+const printState = (state, elevator, context = "", print = true) => {
   let real_res = "";
   for (let i = state.length - 1; i >= 0; i--) {
     const floor = state[i];
@@ -59,29 +59,17 @@ const printState = (state, elevator, context = "") => {
     }
     real_res = real_res + res + "\n";
   }
-  console.log(context + ": " + "\n" + real_res);
+  if (print) {
+    console.log(context + ": " + "\n" + real_res);
+  }
 };
 const termination = 5;
 
 const solve = (state, elevator = 0, steps = 0) => {
-  if (steps > 11) {
+  if (steps > 12) {
     return Infinity;
   }
-  // REMOVE
-  printState(state, elevator, "STEP " + steps);
-  if (steps === 2 && state[2].join("") !== "HGHMLG") {
-    return Infinity;
-  }
-  if (
-    steps === 3 &&
-    state[2].join("") !== "HGLG" &&
-    state[1].join("") !== "HM"
-  ) {
-    return Infinity;
-  }
-  seen[JSON.stringify(state)] = true;
-  if (solutions[JSON.stringify(state)]) {
-  }
+  seen[JSON.stringify([state, elevator])] = true;
   if (isSolved(state)) {
     console.log("WEH");
     printState(state, elevator, "SOLVED");
@@ -89,8 +77,10 @@ const solve = (state, elevator = 0, steps = 0) => {
     return steps;
   }
   if (isDead(state)) {
+    printState(state, elevator, "OH NO DEAD " + steps, steps < 3);
     return Infinity;
   }
+  printState(state, elevator, "STEP " + steps, steps < 3);
   const possibles = [];
   const floor = state[elevator];
 
@@ -99,9 +89,14 @@ const solve = (state, elevator = 0, steps = 0) => {
       if (i === j) {
         possibles.push([i]);
       } else {
-        possibles.push([i, j]);
+        if (!possibles.some(([i0, j0]) => (i0 === i && j0 === j) || (i0 === j && j0 === i))) {
+          possibles.push([i, j]);
+        }
       }
     }
+  }
+  if (steps < 3) {
+    console.log(possibles, steps);
   }
   const potentials = [];
   for (let i of [1, -1]) {
@@ -121,8 +116,12 @@ const solve = (state, elevator = 0, steps = 0) => {
         }
         return floor;
       });
-      if (!seen[JSON.stringify(newState)]) {
+      printState(newState, newElevator, "Pretendant for step " + (steps + 1), steps < 3);
+      if (!seen[JSON.stringify([newState, newElevator])]) {
+        console.log("go on");
         potentials.push(solve(newState, newElevator, steps + 1));
+      } else {
+        console.log("SEEN THAT shit");
       }
     }
   }
