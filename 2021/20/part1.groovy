@@ -3,7 +3,16 @@ def lines = new File("test-input").readLines();
 // 6435
 
 def translationLines = lines.takeWhile { it.length() > 1}
+
 def translation = translationLines.join("")
+def expected = 
+"..#.#..#####.#.#.#.###.##.....###.##.#..###.####..#####..#....#..#..##..###..######.###...####..#..#####..##..#.#####...##.#.#..#.##..#.#......#.###.######.###.####...#.##.##..#..#..#####.....#.#....###..#.##......#.....#..#..#..##..#...##.######.####.####.#.#...#.......#..#.#.#...####.##.#......#..#...##.#.##..#...##.#.##..###.#......#.#.......#.#.#.####.###.##...#.....####.#..#..#.##.#....##..#.####....##...##..#...#......#.#.......#.......##..####..#...#.#.#...##..#.#..###..#####........#..####......#..#"
+
+println(expected.length())
+println(translation === expected)
+expected.eachWithIndex { val, i ->
+  print([val, translation[i], val == translation[i]])
+}
 
 def imageLines = lines.drop(translationLines.size() + 2)
 
