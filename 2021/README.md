@@ -18,7 +18,8 @@
 18. [Javascript](https://github.com/Axnyff/advent-of-code/tree/master/2021/18)
 19. [Scala](https://github.com/Axnyff/advent-of-code/tree/master/2021/19)
 20. [Groovy](https://github.com/Axnyff/advent-of-code/tree/master/2021/20)
+21. [Bash](https://github.com/Axnyff/advent-of-code/tree/master/2021/21)
 
 Remaining:
-Julia, Erlang, Bash, Racket
+Julia, Erlang, Racket
 SmallTalk, Haskell, Swift, R, Dart, Nim
