@@ -20,6 +20,7 @@
 20. [Groovy](https://github.com/Axnyff/advent-of-code/tree/master/2021/20)
 21. [Bash](https://github.com/Axnyff/advent-of-code/tree/master/2021/21)
 22. [Julia](https://github.com/Axnyff/advent-of-code/tree/master/2021/22)
+23. [Dart](https://github.com/Axnyff/advent-of-code/tree/master/2021/23)
 
 Remaining:
 Erlang, Racket
