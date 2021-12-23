@@ -27,7 +27,6 @@ var initial = stringifyState({
   "8-1": "D",
   "8-2": "A",
 });
-
 var end = stringifyState({
   "2-1": "A",
   "2-2": "A",
@@ -53,14 +52,14 @@ bool canGoToTarget(Map<String, String> state, int xstart, int xend, int ystart, 
     }
 
     if (xstart > xend) {
-      for (var i = xend; i <= xstart; i++) {
+      for (var i = xend; i < xstart; i++) {
         if (state.containsKey(getKey(i, 0))) {
           return false;
         }
       }
       return true;
     }
-    for (var i = xstart; i <= xend; i++) {
+    for (var i = xstart + 1; i <= xend; i++) {
       if (state.containsKey(getKey(i, 0))) {
         return false;
       }
@@ -68,19 +67,19 @@ bool canGoToTarget(Map<String, String> state, int xstart, int xend, int ystart, 
     return true;
   }
   if (xstart > xend) {
-    for (var i = xend; i <= xstart; i++) {
+    for (var i = xend; i < xstart; i++) {
       if (state.containsKey(getKey(i, 0))) {
         return false;
       }
     }
   } else {
-    for (var i = xstart; i <= xend; i++) {
+    for (var i = xstart + 1; i <=xend; i++) {
       if (state.containsKey(getKey(i, 0))) {
         return false;
       }
     }
   }
-  for (var i = 0; i <= yend; i++ ) {
+  for (var i = 0 + 1; i <= yend; i++ ) {
     if (state.containsKey(getKey(xend, i))) {
       return false;
     }
@@ -99,15 +98,19 @@ List<Pair<String, int>> getPossibleMoves(Map<String, String> state, String key) 
     ((state["${room}-1"] ?? amphipod) == amphipod) &&
     ((state["${room}-2"] ?? amphipod) == amphipod);
 
+  if (roomIsValid && x == room) {
+    return [];
+  }
+
   var diff = room - x;
   if (y == 0) {
     if (!roomIsValid) {
       return [];
     }
-    if (canGoToTarget(state, x, room, y, 2)) {
+    if (canGoToTarget(state, x, room, 0, 2)) {
       return [Pair(getKey(room, 2), (diff.abs() + 2) * getCost(amphipod))];
     }
-    if (canGoToTarget(state, x, room, y, 1)) {
+    if (canGoToTarget(state, x, room, 0, 1)) {
       return [Pair(getKey(room, 1), (diff.abs() + 1) * getCost(amphipod))];
     }
     return [];
@@ -166,6 +169,17 @@ Map<String, String> parseState(String rawState) {
   return result;
 }
 
+void printMap(String map) {
+  var start = parseState(map);
+  for (var j = 0; j <= 2; j++) {
+    var s = "";
+    for (var i = 0; i <= 10; i++) {
+      s += start[getKey(i, j)] ?? ".";
+    }
+    print(s);
+  }
+}
+
 
 var dp = {initial: 0};
 var toExplore = {initial};
@@ -196,12 +210,5 @@ void main() {
     }
     toExplore = newToExplore;
   }
-  print("Go");
   print(dp[end]);
-  for (final item in dp.values) {
-    print(item);
-  }
-  var values = dp.values.toList();
-  values.sort();
-  print(values.last);
 }
