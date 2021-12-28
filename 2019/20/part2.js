@@ -1,4 +1,4 @@
-const lines = require('fs').readFileSync('test-input').toString().trimEnd().split("\n").map(el => el.split(""));
+const lines = require('fs').readFileSync('input').toString().trimEnd().split("\n").map(el => el.split(""));
 
 const portals = {};
 
@@ -36,13 +36,11 @@ const explore = (start) => {
   const result = [];
   let toExplore = [start];
   const explored = new Set();
-  let step = 0;
   while (toExplore.length) {
-    step++;
     const newToExplore = [];
     for (let item of toExplore) {
-      explored.add(item);
-      const [x, y, level] = parseKey(item);
+      const [x, y, level, step] = parseKey(item);
+      explored.add(`${x},${y},${level}`);
       for (let [dx, dy] of offsets) {
         const newX = x + dx;
         const newY = y + dy;
@@ -55,7 +53,7 @@ const explore = (start) => {
           if (explored.has(`${newKey},${level}`)) {
             continue;
           } else {
-            newToExplore.push(`${newKey},${level}`);
+            newToExplore.push(`${newKey},${level},${step+1}`);
             continue;
           }
         }
@@ -74,12 +72,12 @@ const explore = (start) => {
           if (cell.endsWith('Inner')) {
             const toPush = `${newNewKey},${level + 1}`;
             if (!explored.has(toPush)) {
-              newToExplore.push(toPush);
+              newToExplore.push(`${toPush},${step+2}`);
             }
           } else {
             const toPush = `${newNewKey},${level - 1}`;
             if (!explored.has(toPush)) {
-              newToExplore.push(toPush);
+              newToExplore.push(`${toPush},${step + 2}`);
             }
           }
 
@@ -88,8 +86,8 @@ const explore = (start) => {
     }
     toExplore = newToExplore;
   }
-  return result;
+  return Math.min(...result);
 };
 
 
-console.log(explore(`${portals.AAOuter},0`));
+console.log(explore(`${portals.AAOuter},0,1`));
