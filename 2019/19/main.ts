@@ -150,7 +150,6 @@ const part1 = (data) => {
   let y = 10;
   let x = 0;
   while(true) {
-    console.log(x, y, executeIns(x, y));
     while (executeIns(x, y) === 0) {
       x++;
     }
