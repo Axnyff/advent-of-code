@@ -12,6 +12,18 @@ arg@^4.1.0:
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.2.tgz#e70c90579e02c63d80e3ad4e31d8bfdb8bd50064"
   integrity sha512-+ytCkGcBtHZ3V2r2Z06AncYO8jz46UEamcspGoU8lHcEbpn6J77QK0vdWvChsclg/tM5XIJC5tnjmPp7Eq6Obg==
 
+bigint-crypto-utils@^3.0.21:
+  version "3.0.21"
+  resolved "https://registry.yarnpkg.com/bigint-crypto-utils/-/bigint-crypto-utils-3.0.21.tgz#cfb5d2edc2b8f5246dbb730b98b208097756fa76"
+  integrity sha512-nJG6IQ5mgAl32V2QgdKpJOQndylgxiTwpKy92riMAPZdBy94jfZ6Z8IORY4y4/p8C9d+7Izd/YMKsxBcVocdFA==
+  dependencies:
+    bigint-mod-arith "^3.0.1"
+
+bigint-mod-arith@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/bigint-mod-arith/-/bigint-mod-arith-3.0.1.tgz#9d78e6840eef7b00e4e4ac46c7c860ba4a230c56"
+  integrity sha512-sEgnLaPHMNvY1Ylb/IxWXA+6anlg283FYSnKWi/odba2mvHSwt2sqSJihrE+mFUkiRrFb0Nxw+XdIwByOi42/w==
+
 buffer-from@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
