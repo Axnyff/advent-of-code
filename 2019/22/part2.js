@@ -13,7 +13,7 @@ const handleInstruction = (deck, instruction) => {
   return cut(deck, count);
 };
 
-const times = 101741582076661n;
+const times =    101741582076661n;
 const deckSize = 119315717514047n;
 const cardPosition = 2020n;
 
