@@ -9,6 +9,7 @@
   "dependencies": {
     "@types/node": "^12.12.14",
     "bigint-crypto-utils": "^3.0.21",
+    "prompt": "^1.2.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.2"
   }
