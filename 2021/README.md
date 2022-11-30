@@ -22,4 +22,4 @@
 22. [Julia](https://github.com/Axnyff/advent-of-code/tree/master/2021/22)
 23. [Dart](https://github.com/Axnyff/advent-of-code/tree/master/2021/23)
 24. [Haskell](https://github.com/Axnyff/advent-of-code/tree/master/2021/24)
-25. [Nil](https://github.com/Axnyff/advent-of-code/tree/master/2021/25)
+25. [Nim](https://github.com/Axnyff/advent-of-code/tree/master/2021/25)
