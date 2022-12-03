@@ -1,4 +1,4 @@
-(ns exo1.main
+(ns exo2.main
   (:require 
     [clojure.string]
     [lumo.io :refer [slurp]]))
