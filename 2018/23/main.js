@@ -16,54 +16,6 @@ const bots = require("fs")
 const maxRadius = bots.reduce((max, bot) => Math.max(bot.r, max), 0);
 const strongest = bots.find(({ r }) => r === maxRadius);
 
-// console.log(bots.filter(({ x, y, z }) => Math.abs(x - strongest.x) + Math.abs(y - strongest.y) + Math.abs(z - strongest.z) <= maxRadius).length);
-
-const getMinMax = (bots, fn) => {
-  return [
-    bots.reduce((sum, bot) => Math.min(sum, fn(bot)), Infinity),
-    bots.reduce((sum, bot) => Math.max(sum, fn(bot)), -Infinity),
-  ];
-};
-
-const [minX, maxX] = getMinMax(bots, (bot) => bot.x);
-const [minY, maxY] = getMinMax(bots, (bot) => bot.y);
-const [minZ, maxZ] = getMinMax(bots, (bot) => bot.z);
-
-const size = Math.max(maxX - minX, maxY - minY, maxZ - minZ);
-
-const closest = (bot, cube) => {
-  let { x, y, z } = bot;
-
-  if (x < cube.minX) {
-    x = minX;
-  }
-  if (x > cube.maxX) {
-    x = maxX;
-  }
-  if (y < cube.minY) {
-    y = minY;
-  }
-  if (y > cube.maxY) {
-    y = maxY;
-  }
-  if (z < cube.minZ) {
-    z = minZ;
-  }
-  if (z > cube.maxZ) {
-    z = maxZ;
-  }
-  return { x, y, z };
-};
-
-let startCube = {
-  minX,
-  maxX: minX + size,
-  minY,
-  maxY: minY + size,
-  minZ,
-  maxZ: minZ + size,
-};
-
 const distance = (botA, botB) => {
   return (
     Math.abs(botA.x - botB.x) +
@@ -72,80 +24,48 @@ const distance = (botA, botB) => {
   );
 };
 
-const isInCube = (bot, cube) => {
-  return distance(closest(bot, cube), bot) <= bot.r;
-};
+console.log(bots.filter(({ x, y, z }) => Math.abs(x - strongest.x) + Math.abs(y - strongest.y) + Math.abs(z - strongest.z) <= maxRadius).length);
 
-const vol = (cube) =>
-  (cube.maxX - cube.minX) * (cube.maxY - cube.minY) * (cube.maxZ - cube.minZ);
-
-const countBotsInCube = (cube) => {
-  return bots.filter((bot) => isInCube(bot, cube)).length;
-};
-
-const findNextCube = (cube) => {
-  const cubes = [
-    {
-      ...cube,
-      maxX: Math.round((cube.minX + cube.maxX) / 2),
-      maxY: Math.round((cube.minY + cube.maxY) / 2),
-      maxZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      maxX: Math.round((cube.minX + cube.maxX) / 2),
-      minY: Math.round((cube.minY + cube.maxY) / 2),
-      maxZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      maxX: Math.round((cube.minX + cube.maxX) / 2),
-      minY: Math.round((cube.minY + cube.maxY) / 2),
-      minZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      maxX: Math.round((cube.minX + cube.maxX) / 2),
-      maxY: Math.round((cube.minY + cube.maxY) / 2),
-      minZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      minX: Math.round((cube.minX + cube.maxX) / 2),
-      maxY: Math.round((cube.minY + cube.maxY) / 2),
-      maxZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      minX: Math.round((cube.minX + cube.maxX) / 2),
-      minY: Math.round((cube.minY + cube.maxY) / 2),
-      maxZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      minX: Math.round((cube.minX + cube.maxX) / 2),
-      minY: Math.round((cube.minY + cube.maxY) / 2),
-      minZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-    {
-      ...cube,
-      minX: Math.round((cube.minX + cube.maxX) / 2),
-      maxY: Math.round((cube.minY + cube.maxY) / 2),
-      minZ: Math.round((cube.minZ + cube.maxZ) / 2),
-    },
-  ];
-
-  console.log("ROUND");
-  cubes.sort((cubeA, cubeB) => countBotsInCube(cubeB) - countBotsInCube(cubeA));
-
-  cubes.forEach(cube => console.log(countBotsInCube(cube)));
-  return cubes[0];
-};
-
-let cube = startCube;
-for (let i = 0; i < 10; i++) {
-  cube = findNextCube(cube);
-  console.log(countBotsInCube(cube));
+const graph = {};
+for (let bot of bots) {
+  graph[bot.r] = new Set();
 }
 
-console.log(startCube, cube);
+for (let botA of bots) {
+  for (let botB of bots) {
+    if (botB !== botA && distance(botB, botA) < botB.r) {
+      graph[botB.r.toString()].add(botA.r.toString());
+    }
+  }
+}
+
+const res = new Set();
+let items = [];
+for (let bot of Object.keys(graph)) {
+  let toExplore = new Set([bot]);
+  let resolved = new Set();
+  while (toExplore.size) {
+    let newToExplore = new Set();
+    for (let item of toExplore) {
+      if (!item || res.has(item)) {
+        continue;
+      }
+      res.add(item);
+      resolved.add(item);
+      newToExplore = new Set([...newToExplore, ...graph[item]])
+    }
+    resolved.add(...toExplore);
+    toExplore = newToExplore;
+  }
+  items = [...resolved];
+  break;
+}
+
+
+const validBots = bots.filter(bot => items.includes(bot.r.toString()));
+
+const minX = Math.min(...validBots.map(b => b.x));
+const maxX = Math.max(...validBots.map(b => b.x));
+
+validBots.sort((botA, botB) => distance(botB, {x: 0, y:0, z: 0}) - distance(botA, { x: 0, y: 0, z: 0}))
+console.log(distance(validBots[0], { x: 0, y: 0, z: 0}) - validBots[0].r);
