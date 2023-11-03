@@ -80,7 +80,6 @@ const fill = (x, y) => {
     let continues = 0;
     const newToExplore = new Set();
     for (let item of toExplore) {
-      // console.log("GO");
       explored.add(item);
       let x = Number(item.split(",")[0]);
       let y = Number(item.split(",")[1]);
@@ -94,8 +93,6 @@ const fill = (x, y) => {
         if (plot[key(x, y + 1)] === "|") {
           let xLeft = x - 1;
           while (plot[key(xLeft, y + 1)] === "|") {
-            // console.log(xLeft, y + 1);
-            // console.log("finif");
             xLeft--;
           }
           if (plot[key(xLeft, y + 1)] !== "#") {
@@ -103,15 +100,12 @@ const fill = (x, y) => {
           }
           let xRight = x + 1;
           while (plot[key(xRight, y + 1)] === "|") {
-            // console.log(xRight, y + 1);
-            // console.log("finif");
             xRight++;
           }
           if (plot[key(xRight, y + 1)] !== "#") {
             continue;
           }
 
-          console.log(x, y);
           // return;
         }
         let canEscape = false;
