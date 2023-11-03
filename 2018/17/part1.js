@@ -55,7 +55,7 @@ require("fs")
   });
 
 const show = () => {
-  for (let y = minY - 1; y < maxY + 1; y++) {
+  for (let y = 0; y < 300 + 1; y++) {
     let line = `${y}`.padEnd(3, " ");
     for (let x = minX - 2; x <= maxX + 2; x++) {
       line = line + (plot[key(x, y)] || " ");
@@ -64,74 +64,90 @@ const show = () => {
   }
   let line = (maxY + 1).toString().padEnd(3, " ");
   for (let x = minX - 2; x <= maxX + 2; x++) {
-    line = line + (x === 500 ? "!" : " ")
+    line = line + (x === 500 ? "!" : " ");
   }
   console.log(line);
 };
 
 const calls = [];
 const fill = (x, y) => {
-  let toExplore = [[500, 1]];
+  let toExplore = new Set();
+  toExplore.add("500,1");
+  let explored = new Set();
 
-  while (toExplore.length) {
-    const newToExplore = [];
-    for (let [x, y] of toExplore) {
-      if (y > maxY) {
+  while (toExplore.size) {
+    const count = Object.values(plot).filter((l) => l === "|").length;
+    if (count > 100000) {
+      return;
+    }
+    const newToExplore = new Set();
+    for (let item of toExplore) {
+      // console.log("GO");
+      explored.add(item);
+      let x = Number(item.split(",")[0]);
+      let y = Number(item.split(",")[1]);
+      if (y > maxY || y < 0) {
         continue;
       }
       plot[key(x, y)] = "|";
       if (!plot[key(x, y + 1)]) {
-        newToExplore.push([x, y + 1]);
-      } else if (plot[key(x, y + 1)] === "#") {
-         if (plot[key(x, y + 1)] === "|") {
-        
-           let xLeft = x -1;
-           while (plot[key(xLeft, y + 1)] === "|") {
-             xLeft--;
-           }
-           if (plot[key(xLeft, y +1)] === " ") {
-             continue;
-           }
-           let xRight = x + 1;
-           while (plot[key(xRight, y + 1)] === "|") {
-             xRight++;
-           }
-           if (plot[key(xRight, y +1)] === " ") {
-             continue;
-           }
-         }
+        newToExplore.add(key(x, y + 1));
+      } else if (plot[key(x, y + 1)]) {
+        if (plot[key(x, y + 1)] === "|") {
+          continue;
+          let xLeft = x - 1;
+          while (plot[key(xLeft, y + 1)] === "|") {
+            // console.log(xLeft, y + 1);
+            // console.log("finif");
+            xLeft--;
+          }
+          if (plot[key(xLeft, y + 1)] === " ") {
+            continue;
+          }
+          let xRight = x + 1;
+          while (plot[key(xRight, y + 1)] === "|") {
+            // console.log(xRight, y + 1);
+            // console.log("finif");
+            xRight++;
+          }
+          if (plot[key(xRight, y + 1)] === " ") {
+            continue;
+          }
+        }
         let canEscape = false;
         while (!canEscape) {
           let xLeft = x - 1;
           while (!plot[key(xLeft, y)] && plot[key(xLeft, y + 1)]) {
-            plot[key(xLeft, y)] = "|"
+            plot[key(xLeft, y)] = "|";
             xLeft--;
           }
           if (!plot[key(xLeft, y + 1)]) {
-            toExplore.push([xLeft, y]);
+            if (!explored.has(key(xLeft, y))) {
+              newToExplore.add(key(xLeft, y));
+            }
             canEscape = true;
           }
           let xRight = x + 1;
           while (!plot[key(xRight, y)] && plot[key(xRight, y + 1)]) {
-            plot[key(xRight, y)] = "|"
+            plot[key(xRight, y)] = "|";
             xRight++;
           }
           if (!plot[key(xRight, y + 1)]) {
-            toExplore.push([xRight, y]);
+            if (!explored.has(key(xRight, y))) {
+              newToExplore.add(key(xRight, y));
+            }
             canEscape = true;
           }
           y--;
         }
       } else if (plot[key(x, y + 1)] === "|") {
-
       }
     }
     toExplore = newToExplore;
   }
-
-}
+};
 
 // show();
 fill();
-console.log(Object.values(plot).filter(l => l === "|").length);
+console.log(Object.values(plot).filter((l) => l === "|").length);
 show();
