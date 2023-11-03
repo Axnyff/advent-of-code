@@ -55,14 +55,14 @@ require("fs")
   });
 
 const show = () => {
-  for (let y = 0; y < 300 + 1; y++) {
-    let line = `${y}`.padEnd(3, " ");
+  for (let y = 0; y < maxY + 1; y++) {
+    let line = `${y}`.padEnd(5, " ");
     for (let x = minX - 2; x <= maxX + 2; x++) {
       line = line + (plot[key(x, y)] || " ");
     }
     console.log(line);
   }
-  let line = (maxY + 1).toString().padEnd(3, " ");
+  let line = (maxY + 1).toString().padEnd(5, " ");
   for (let x = minX - 2; x <= maxX + 2; x++) {
     line = line + (x === 500 ? "!" : " ");
   }
@@ -76,11 +76,8 @@ const fill = (x, y) => {
   let explored = new Set();
 
   while (toExplore.size) {
-    const count = Object.values(plot).filter((l) => l === "|").length;
-    if (count > 100000) {
-      return;
-    }
-    let countinues = 0;
+    // const count = Object.values(plot).filter((l) => l === "|").length;
+    let continues = 0;
     const newToExplore = new Set();
     for (let item of toExplore) {
       // console.log("GO");
@@ -101,7 +98,7 @@ const fill = (x, y) => {
             // console.log("finif");
             xLeft--;
           }
-          if (plot[key(xLeft, y + 1)] === " ") {
+          if (plot[key(xLeft, y + 1)] !== "#") {
             continue;
           }
           let xRight = x + 1;
@@ -110,20 +107,18 @@ const fill = (x, y) => {
             // console.log("finif");
             xRight++;
           }
-          if (plot[key(xRight, y + 1)] === " ") {
+          if (plot[key(xRight, y + 1)] !== "#") {
             continue;
           }
-          continues++;
-          if (countinues > 2) {
 
-            console.log(x, y);
-            return;
-          }
+          console.log(x, y);
+          // return;
         }
         let canEscape = false;
         while (!canEscape) {
+          plot[key(x, y)] = "|";
           let xLeft = x - 1;
-          while (!plot[key(xLeft, y)] && plot[key(xLeft, y + 1)]) {
+          while (plot[key(xLeft, y)] !== "#" && plot[key(xLeft, y + 1)]) {
             plot[key(xLeft, y)] = "|";
             xLeft--;
           }
@@ -134,7 +129,7 @@ const fill = (x, y) => {
             canEscape = true;
           }
           let xRight = x + 1;
-          while (!plot[key(xRight, y)] && plot[key(xRight, y + 1)]) {
+          while (plot[key(xRight, y)] !== "#" && plot[key(xRight, y + 1)]) {
             plot[key(xRight, y)] = "|";
             xRight++;
           }
