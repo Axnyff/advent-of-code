@@ -83,6 +83,23 @@ const fill = (x, y) => {
       if (!plot[key(x, y + 1)]) {
         newToExplore.push([x, y + 1]);
       } else if (plot[key(x, y + 1)] === "#") {
+         if (plot[key(x, y + 1)] === "|") {
+        
+           let xLeft = x -1;
+           while (plot[key(xLeft, y + 1)] === "|") {
+             xLeft--;
+           }
+           if (plot[key(xLeft, y +1)] === " ") {
+             continue;
+           }
+           let xRight = x + 1;
+           while (plot[key(xRight, y + 1)] === "|") {
+             xRight++;
+           }
+           if (plot[key(xRight, y +1)] === " ") {
+             continue;
+           }
+         }
         let canEscape = false;
         while (!canEscape) {
           let xLeft = x - 1;
