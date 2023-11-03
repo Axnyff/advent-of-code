@@ -80,6 +80,7 @@ const fill = (x, y) => {
     if (count > 100000) {
       return;
     }
+    let countinues = 0;
     const newToExplore = new Set();
     for (let item of toExplore) {
       // console.log("GO");
@@ -94,7 +95,6 @@ const fill = (x, y) => {
         newToExplore.add(key(x, y + 1));
       } else if (plot[key(x, y + 1)]) {
         if (plot[key(x, y + 1)] === "|") {
-          continue;
           let xLeft = x - 1;
           while (plot[key(xLeft, y + 1)] === "|") {
             // console.log(xLeft, y + 1);
@@ -112,6 +112,12 @@ const fill = (x, y) => {
           }
           if (plot[key(xRight, y + 1)] === " ") {
             continue;
+          }
+          continues++;
+          if (countinues > 2) {
+
+            console.log(x, y);
+            return;
           }
         }
         let canEscape = false;
