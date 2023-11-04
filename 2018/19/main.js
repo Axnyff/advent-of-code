@@ -105,10 +105,6 @@ for (let i = 3; i < 12; i++) {
   }
   console.log(lines[i]);
 }
-const target = 10551261;
-let total = 0;
-
-[ 0, 3, 1, 10550400, 10551261, 1 ]
 const run = async () => {
   console.log("START");
   while (lines[regs[p]]) {

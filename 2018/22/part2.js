@@ -1,13 +1,12 @@
-const xT = 10;
-const yT = 10;
-const depth = 510;
-// const xT = 5;
-// const yT = 746;
-// const depth = 4002;
-
+// const xT = 10;
+// const yT = 10;
+// const depth = 510;
+const xT = 5;
+const yT = 746;
+const depth = 4002;
 
 const geos = {};
-const key = (x, y) => x + ',' + y;
+const key = (x, y) => x + "," + y;
 const getGeo = (x, y) => {
   if (x === 0 && y === 0) {
     return 0;
@@ -25,7 +24,7 @@ const getGeo = (x, y) => {
   if (geos[k]) {
     return geos[k];
   }
-  const res = getErosion(x - 1, y) * getErosion(x, y -1);
+  const res = getErosion(x - 1, y) * getErosion(x, y - 1);
   geos[k] = res;
   return res;
 };
@@ -43,12 +42,10 @@ const getErosion = (x, y) => {
 
 const getType = (x, y) => getErosion(x, y) % 3;
 
-
 let toExplore = new Map();
-toExplore.set("0,0,T", "");
+toExplore.set("0,0,T", 0);
 
 let explored = new Map();
-
 
 const show = () => {
   for (let y = 0; y <= 20; y++) {
@@ -60,13 +57,13 @@ const show = () => {
         continue;
       }
       if (type === 0) {
-        line += "."
+        line += ".";
       }
       if (type === 1) {
-        line += "="
+        line += "=";
       }
       if (type === 2) {
-        line += "|"
+        line += "|";
       }
     }
     console.log(line);
@@ -74,6 +71,7 @@ const show = () => {
 };
 
 const getCost = (path) => {
+  return path;
   let total = 0;
   for (let item of path) {
     if ("CNT".includes(item)) {
@@ -93,15 +91,26 @@ while (toExplore.size) {
   for (let [item, path] of toExplore) {
     explored.set(item, path);
     const explore = (key, path) => {
-      const exploredCost = explored.has(key) ? getCost(explored.get(key)) : Infinity;
-      const toExploreCost = newToExplore.has(key) ? getCost(newToExplore.get(key)) : Infinity;
+      const exploredCost = explored.has(key)
+        ? getCost(explored.get(key))
+        : Infinity;
+      const toExploreCost = newToExplore.has(key)
+        ? getCost(newToExplore.get(key))
+        : Infinity;
       const cost = getCost(path);
       if (cost < exploredCost && cost < toExploreCost) {
         newToExplore.set(key, path);
       }
     };
     const addPath = (x, y, currentType, tool, prev, dir) => {
-      console.assert((currentType !== 0 || tool !== "N") || (currentType !== 1 || tool !== "T") || (currentType === 2 && tool !== "T"), currentType + tool);
+      console.assert(
+        currentType !== 0 ||
+          tool !== "N" ||
+          currentType !== 1 ||
+          tool !== "T" ||
+          (currentType === 2 && tool !== "T"),
+        currentType + tool
+      );
       if (x < 0 || y < 0) {
         return;
       }
@@ -110,24 +119,24 @@ while (toExplore.size) {
 
       if (type === 0) {
         if (tool !== "N") {
-          explore(k + "," + tool, prev + dir);
+          explore(k + "," + tool, prev + 1);
         } else {
           const newTool = currentType === 1 ? "C" : "T";
-          explore(k + "," + newTool, prev + newTool + dir);
+          explore(k + "," + newTool, prev + 8);
         }
       } else if (type === 1) {
         if (tool !== "T") {
-          explore(k + "," + tool, prev + dir);
+          explore(k + "," + tool, prev + 1);
         } else {
           const newTool = currentType === 0 ? "C" : "N";
-          explore(k + "," + newTool, prev + newTool + dir);
+          explore(k + "," + newTool, prev + 8);
         }
       } else if (type === 2) {
         if (tool !== "C") {
-          explore(k + "," + tool, prev + dir);
+          explore(k + "," + tool, prev + 1);
         } else {
           const newTool = currentType === 0 ? "T" : "N";
-          explore(k + "," + newTool, prev + newTool + dir);
+          explore(k + "," + newTool, prev + 8);
         }
       }
     };
@@ -136,7 +145,7 @@ while (toExplore.size) {
     const y = Number(raw_y);
     const currentType = getType(x, y);
     if (x === xT && y === yT) {
-      const cost = tool === "T" ? getCost(path) : getCost(path + "T");
+      const cost = tool === "T" ? getCost(path) : getCost(path + 7);
       if (cost < foundCost) {
         foundCost = cost;
         console.log(path);
