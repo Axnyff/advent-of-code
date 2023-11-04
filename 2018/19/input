@@ -1,8 +1,6 @@
-# a, ip, b, c, d, e
-
-0 addi 1 16 1 # ip += 16
-1 seti 1 1 5  # e = ip + 1
-2 seti 1 4 2  # b
+0 addi 1 16 1
+1 seti 1 1 5
+2 seti 1 4 2
 3 mulr 5 2 3
 4 eqrr 3 4 3
 5 addr 3 1 1
