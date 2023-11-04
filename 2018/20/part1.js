@@ -1,244 +1,41 @@
-const input = require("fs").readFileSync("input").toString().slice(1, -2);
+const input = require("fs").readFileSync("test-input").toString().slice(1, -2);
 
-const parseAlternatives = (input) => {
-  const content = input.slice(1, -1);
-  const alternatives = [];
-  let i = 0;
-  let j = i;
-  while (i < content.length) {
-    const alt = [];
-    if (j === content.length) {
-      alternatives.push(content.slice(i, j));
-      break;
-    }
-    if (content[j] === "|") {
-      alternatives.push(content.slice(i, j));
-      j++;
-      i = j;
-      continue;
-    }
-    if (content[j] === "(") {
-      const len = findGroupLength(content.slice(j));
-      j += len;
-      continue;
-    }
-    j++;
-  }
-  return alternatives;
+const diffs = {
+  W: [-1, 0],
+  E: [1, 0],
+  N: [0, -1],
+  S: [0, 1],
 };
 
-const findGroupLength = (input) => {
-  let parenCount = 1;
-  let pos = 1;
-  while (parenCount) {
-    if (input[pos] === ")") {
-      parenCount--;
-      if (parenCount === 0) {
-        break;
-      }
-    } else if (input[pos] === "(") {
-      parenCount++;
-    }
-    pos++;
-  }
-  return pos;
-};
+const x = 0;
+const y = 0;
+const positions = [];
 
-const parseGroup = (input) => {
-  return {
-    alts: parseAlternatives(input).map((alt) => {
-      if (alt.includes("(")) {
-        return translateRegex(alt);
-      }
-      return alt;
-    }),
-  };
-};
+const prevX = 0;
+const prevY = 0;
+const distances = {}
 
-const translateRegex = (input) => {
-  const res = [];
-  let content = input;
-  while (content.length) {
-    if (content[0] === "(") {
-      const len = findGroupLength(content);
-      res.push(parseGroup(content));
-      content = content.slice(len + 1);
-    } else {
-      const parenIndex = content.indexOf("(");
-      res.push(content.slice(0, parenIndex));
-      content = content.slice(parenIndex);
-    }
-  }
-  return res;
-};
-
-const getAllPaths = (data) => {
-  let res = [""];
-  for (let item of data) {
-    let newRes = [];
-    if (typeof item === "string") {
-      for (let r of res) {
-        newRes.push(r + item);
-      }
-    } else {
-      const alts = item.alts;
-      for (let alt of item.alts) {
-        const paths = getAllPaths(alt);
-        for (let path of paths) {
-          for (let r of res) {
-            newRes.push(r + path);
-          }
-        }
-      }
-    }
-    res = newRes;
-  }
-  return res;
-};
-
-
-const groups = {};
-
-const parseAlternatives2 = (input) => {
-  const len = findGroupLength(input);
-  const content = input.slice(1);
-  const alternatives = [];
-  let i = 0;
-  let j = i;
-  while (i < len) {
-    const alt = [];
-    if (j === content.length) {
-      alternatives.push(i);
-      break;
-    }
-    if (content[j] === "|") {
-      alternatives.push(i);
-      j++;
-      i = j;
-      continue;
-    }
-    if (content[j] === "(") {
-      const len = findGroupLength(content.slice(j));
-      j += len;
-      continue;
-    }
-    j++;
-  }
-  return alternatives;
-};
-// return
-
-const getGroups = (input, index = 0) => {
-  while (input[index] !== "(") {
-    index++;
-    if (index > input.length) {
-      return;
-    }
-  }
-  const sliced = input.slice(index);
-  const len = findGroupLength(sliced);
-  const alternatives = parseAlternatives2(sliced);
-  groups[index] = {
-    len, alternatives: alternatives.filter(el => el !== len),
-  };
-  getGroups(input, index + 1);
-};
-getGroups(input);
-const groupKeys = Object.keys(groups);
-const choices = groupKeys.map(_ => 0);
-console.log(groupKeys);
-return;
-
-let maxX = -Infinity;
-let maxY = -Infinity;
-let minX = Infinity;
-let minY = Infinity;
 const key = (x, y) => x + "," + y;
-const stuff = {"0,0": "X"};
-
-// walk directly the regex
-//
-const getPath = (input, choices) => {
-  let res = "";
-  let index = 0;
-};
-
-while (true) {
-  let index = 0;
-  const segment = input[index];
-  let x = 0;
-  let y = 0;
-  const path = getPath(input, choices);
-  for (let segment of path) {
-    if (segment === "W") {
-      addToMap(x - 1, y, "|");
-      addToMap(x - 2, y, ".");
-      x -= 2;
-      if (x < minX) {
-        minX = x;
-      }
+for (let char of input) {
+  if (char === "(") {
+    positions.push([x, y]);
+  } else if (char === "|") {
+    ([x, y] = positions[-1]);
+  } else if (char === ")") {
+    ([x, y] = positions.pop());
+  } else {
+    const [diffX, diffY] = diffs[char];
+    x += diffX;
+    y += diffX;
+    const k = key(x, y);
+    const kPrev = key(prevX, prevY);
+    if (distances[k]) {
+      distances[k] = Math.min(distances[k], distances[kPrev] + 1);
+    } else {
+      distances[k] = distances[kPrev] + 1;
     }
-    if (segment === "S") {
-      addToMap(x, y + 1, "-");
-      addToMap(x, y + 2, ".");
-      y += 2;
-      if (y > maxY) {
-        maxY = y;
-      }
-    }
-    if (segment === "N") {
-      addToMap(x, y - 1, "-");
-      addToMap(x, y - 2, ".");
-      y -= 2;
-      if (y < minY) {
-        minY = y;
-      }
-    }
-    if (segment === "E") {
-      addToMap(x + 1, y, "|");
-      addToMap(x + 2, y, ".");
-      x += 2;
-      if (x > maxX) {
-        maxX = x;
-      }
-    }
+    prevX = x;
+    prevY = x;
   }
 }
-
-// for (let y = minY -1; y < maxY + 2; y++) {
-//   let line = y.toString().padEnd(10, " ");
-//   for (let x = minX - 1; x < maxX + 2; x++) {
-//     line = line  + (stuff[key(x, y)] || "#")
-//   }
-//   console.log(line);
-// }
-
-let toExplore = new Set();
-toExplore.add("0,0");
-let explored = new Set();
-
-let doorCount = -1;
-while (toExplore.size) {
-  doorCount++;
-  let newToExplore = new Set();
-  for (let item of toExplore) {
-    explored.add(item);
-    const [x, y] = item.split(",").map(Number);
-    if (stuff[key(x + 1, y)] === "|" && !explored.has(key(x + 2, y))) {
-      newToExplore.add(key(x + 2, y));
-    }
-    if (stuff[key(x - 1, y)] === "|" && !explored.has(key(x - 2, y))) {
-      newToExplore.add(key(x - 2, y));
-    }
-    if (stuff[key(x, y + 1)] === "-" && !explored.has(key(x, y + 2))) {
-      newToExplore.add(key(x, y + 2));
-    }
-    if (stuff[key(x, y - 1)] === "-" && !explored.has(key(x, y - 2))) {
-      newToExplore.add(key(x, y - 2));
-    }
-  }
-  toExplore = newToExplore;
-}
-console.log(doorCount);
-
-
+console.log(Math.max(Object.values(distances)));
