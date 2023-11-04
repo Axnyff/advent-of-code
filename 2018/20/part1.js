@@ -28,6 +28,7 @@ const parseAlternatives = (input) => {
 };
 
 const findGroupLength = (input) => {
+  console.log(input[0]);
   let parenCount = 1;
   let pos = 1;
   while (parenCount && pos < input.length) {
@@ -40,6 +41,8 @@ const findGroupLength = (input) => {
   }
   return pos;
 };
+console.log(findGroupLength(input.slice(11841)));
+return;
 
 const parseGroup = (input) => {
   return {
