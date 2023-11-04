@@ -28,12 +28,14 @@ const parseAlternatives = (input) => {
 };
 
 const findGroupLength = (input) => {
-  console.log(input[0]);
   let parenCount = 1;
   let pos = 1;
-  while (parenCount && pos < input.length) {
+  while (parenCount) {
     if (input[pos] === ")") {
       parenCount--;
+      if (parenCount === 0) {
+        break;
+      }
     } else if (input[pos] === "(") {
       parenCount++;
     }
@@ -41,8 +43,6 @@ const findGroupLength = (input) => {
   }
   return pos;
 };
-console.log(findGroupLength(input.slice(11841)));
-return;
 
 const parseGroup = (input) => {
   return {
@@ -100,11 +100,12 @@ const getAllPaths = (data) => {
 const groups = {};
 
 const parseAlternatives2 = (input) => {
-  const content = input.slice(1, -1);
+  const len = findGroupLength(input);
+  const content = input.slice(1);
   const alternatives = [];
   let i = 0;
   let j = i;
-  while (i < content.length) {
+  while (i < len) {
     const alt = [];
     if (j === content.length) {
       alternatives.push(i);
@@ -125,10 +126,10 @@ const parseAlternatives2 = (input) => {
   }
   return alternatives;
 };
+// return
 
 const getGroups = (input, index = 0) => {
   while (input[index] !== "(") {
-    console.log(index);
     index++;
     if (index > input.length) {
       return;
@@ -143,7 +144,9 @@ const getGroups = (input, index = 0) => {
   getGroups(input, index + 1);
 };
 getGroups(input);
-console.log(groups);
+const groupKeys = Object.keys(groups);
+const choices = groupKeys.map(_ => 0);
+console.log(groupKeys);
 return;
 
 let maxX = -Infinity;
@@ -154,9 +157,18 @@ const key = (x, y) => x + "," + y;
 const stuff = {"0,0": "X"};
 
 // walk directly the regex
-for (let path of paths) {
+//
+const getPath = (input, choices) => {
+  let res = "";
+  let index = 0;
+};
+
+while (true) {
+  let index = 0;
+  const segment = input[index];
   let x = 0;
   let y = 0;
+  const path = getPath(input, choices);
   for (let segment of path) {
     if (segment === "W") {
       addToMap(x - 1, y, "|");
