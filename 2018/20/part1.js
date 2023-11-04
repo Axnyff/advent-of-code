@@ -1,4 +1,4 @@
-const input = require("fs").readFileSync("test-input").toString().slice(1, -2);
+const input = require("fs").readFileSync("input").toString().slice(1, -2);
 
 const parseAlternatives = (input) => {
   const content = input.slice(1, -1);
@@ -30,7 +30,7 @@ const parseAlternatives = (input) => {
 const findGroupLength = (input) => {
   let parenCount = 1;
   let pos = 1;
-  while (parenCount) {
+  while (parenCount && pos < input.length) {
     if (input[pos] === ")") {
       parenCount--;
     } else if (input[pos] === "(") {
@@ -93,10 +93,55 @@ const getAllPaths = (data) => {
   return res;
 };
 
-const paths = getAllPaths(translateRegex(input));
-const addToMap = (x, y, sign) => {
-  stuff[key(x, y)] = sign;
+
+const groups = {};
+
+const parseAlternatives2 = (input) => {
+  const content = input.slice(1, -1);
+  const alternatives = [];
+  let i = 0;
+  let j = i;
+  while (i < content.length) {
+    const alt = [];
+    if (j === content.length) {
+      alternatives.push(i);
+      break;
+    }
+    if (content[j] === "|") {
+      alternatives.push(i);
+      j++;
+      i = j;
+      continue;
+    }
+    if (content[j] === "(") {
+      const len = findGroupLength(content.slice(j));
+      j += len;
+      continue;
+    }
+    j++;
+  }
+  return alternatives;
 };
+
+const getGroups = (input, index = 0) => {
+  while (input[index] !== "(") {
+    console.log(index);
+    index++;
+    if (index > input.length) {
+      return;
+    }
+  }
+  const sliced = input.slice(index);
+  const len = findGroupLength(sliced);
+  const alternatives = parseAlternatives2(sliced);
+  groups[index] = {
+    len, alternatives: alternatives.filter(el => el !== len),
+  };
+  getGroups(input, index + 1);
+};
+getGroups(input);
+console.log(groups);
+return;
 
 let maxX = -Infinity;
 let maxY = -Infinity;
