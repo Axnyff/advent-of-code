@@ -62,4 +62,4 @@
     (add-side-2 [x y (dec z)] )))
 
 (println target)
-(println (apply + (map #(count-sides-2 % dices) dices)))
+(println (apply + (map #(count-sides % dices) dices)))
