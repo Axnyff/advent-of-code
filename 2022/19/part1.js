@@ -72,7 +72,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
       // buy ore
       const oreMissing = blueprint.ore - state.ore;
       const oreTime = Math.ceil(oreMissing / state.oreBot);
-      if (events.length + oreTime <= 23) {
+      if (events.length + oreTime <= 23 - 16) {
         add = true;
         newToExplore.add(events + "".padEnd(oreTime, "W") + "O");
       }
@@ -80,7 +80,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
       // buy clay
       const oreMissing2 = blueprint.clay - state.ore;
       const clayTime = Math.ceil(oreMissing2 / state.oreBot);
-      if (events.length + clayTime <= 23) {
+      if (events.length + clayTime <= 23 - 6) {
         add = true;
         newToExplore.add(events + "".padEnd(clayTime, "W") + "C");
       }
@@ -94,7 +94,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
           Math.ceil(clayMissing / state.clayBot),
           Math.ceil(oreMissing / state.oreBot)
         );
-        if (events.length + obsidianTime <= 23) {
+        if (events.length + obsidianTime <= 23 - 3) {
           add = true;
           newToExplore.add(events + "".padEnd(obsidianTime, "W") + "B");
         }
@@ -109,7 +109,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
           Math.ceil(obsidianMissing / state.obsidianBot),
           Math.ceil(oreMissing / state.oreBot)
         );
-        if (events.length + geodeTime <= 23) {
+        if (events.length + geodeTime <= 23 - 2) {
           add = true;
           newToExplore.add(events + "".padEnd(geodeTime, "W") + "G");
         }
