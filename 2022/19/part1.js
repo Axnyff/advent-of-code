@@ -1,17 +1,27 @@
-const blueprints = [
-  {
-    ore: 4,
-    clay: 2,
-    obsidian: [3, 14],
-    geode: [2, 7],
-  },
-  {
-    ore: 2,
-    clay: 3,
-    obsidian: [3, 8],
-    geode: [3, 12],
-  },
-];
+// const blueprints = [
+//   {
+//     ore: 4,
+//     clay: 2,
+//     obsidian: [3, 14],
+//     geode: [2, 7],
+//   },
+//   {
+//     ore: 2,
+//     clay: 3,
+//     obsidian: [3, 8],
+//     geode: [3, 12],
+//   },
+// ];
+
+const blueprints = require("fs").readFileSync("input").toString().slice(0, -1).split("\n").map(l => {
+  const matches = [...l.matchAll(/\d+/g)];
+  return {
+    ore: Number(matches[1]),
+    clay: Number(matches[2]),
+    obsidian: [Number(matches[3]), Number(matches[4])],
+    geode: [Number(matches[5]), Number(matches[6])],
+  };
+});
 
 const computeState = (blueprint, events) => {
   let state = {
@@ -61,18 +71,21 @@ const getMaxOutputForBluePrint = (blueprint) => {
     let newToExplore = new Set();
     for (let events of toExplore) {
       const state = computeState(blueprint, events);
-      if (state.time >= 23) {
+      if (state.time >= 24) {
         if (state.geode > maxGeode) {
           maxGeode = Math.max(maxGeode, state.geode);
         }
         continue;
       }
 
+      const maxOreBots = Math.max(blueprint.clay, blueprint.obsidian[0], blueprint.geode[0]);
+      const maxClayBots = blueprint.obsidian[1];
+      const maxObsidianBots = blueprint.geode[1];
       let add = false;
       // buy ore
       const oreMissing = blueprint.ore - state.ore;
       const oreTime = Math.ceil(oreMissing / state.oreBot);
-      if (events.length + oreTime <= 23 - 16) {
+      if (events.length + oreTime <= 23 && state.oreBot < maxOreBots) {
         add = true;
         newToExplore.add(events + "".padEnd(oreTime, "W") + "O");
       }
@@ -80,7 +93,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
       // buy clay
       const oreMissing2 = blueprint.clay - state.ore;
       const clayTime = Math.ceil(oreMissing2 / state.oreBot);
-      if (events.length + clayTime <= 23 - 6) {
+      if (events.length + clayTime <= 23 && state.clayBot < maxClayBots) {
         add = true;
         newToExplore.add(events + "".padEnd(clayTime, "W") + "C");
       }
@@ -94,7 +107,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
           Math.ceil(clayMissing / state.clayBot),
           Math.ceil(oreMissing / state.oreBot)
         );
-        if (events.length + obsidianTime <= 23 - 3) {
+        if (events.length + obsidianTime <= 23 && state.obsidianBot < maxObsidianBots) {
           add = true;
           newToExplore.add(events + "".padEnd(obsidianTime, "W") + "B");
         }
@@ -109,7 +122,7 @@ const getMaxOutputForBluePrint = (blueprint) => {
           Math.ceil(obsidianMissing / state.obsidianBot),
           Math.ceil(oreMissing / state.oreBot)
         );
-        if (events.length + geodeTime <= 23 - 2) {
+        if (events.length + geodeTime <= 23) {
           add = true;
           newToExplore.add(events + "".padEnd(geodeTime, "W") + "G");
         }
@@ -125,7 +138,6 @@ const getMaxOutputForBluePrint = (blueprint) => {
 
 let total = 0;
 for (let i = 0; i < blueprints.length; i++) {
-  console.log(i);
   const blueprint = blueprints[i];
   const max = getMaxOutputForBluePrint(blueprint);
   total += (i + 1) * max;
