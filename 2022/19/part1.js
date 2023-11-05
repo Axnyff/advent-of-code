@@ -62,7 +62,10 @@ const getMaxOutputForBluePrint = (blueprint) => {
           console.log(maxGeode, events);
           return;
         }
-        maxGeode = Math.max(maxGeode, state.geode);
+        if (state.geode > maxGeode) {
+          maxGeode = Math.max(maxGeode, state.geode);
+          console.log("MAX", maxGeode);
+        }
         continue;
       }
 
