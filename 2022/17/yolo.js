@@ -1,99 +1,152 @@
-const ROCKS = [
-  new Uint32Array([2, 3, 4, 5]),
-  new Uint32Array([3, 9, 10, 11, 17]),
-  new Uint32Array([2, 3, 4, 11, 18]),
-  new Uint32Array([2, 9, 16, 23]),
-  new Uint32Array([2, 3, 9, 10])
-]
+const input = require("fs").readFileSync("input").toString().slice(0, -1);
+  console.clear()
 
-function rockFall (input, count = 2022) {
-  let i = 0
-  let j = 0
-  const visited = new Map()
-  const blocked = new Set([0, 1, 2, 3, 4, 5, 6])
-  let highest = 0
+  const winds = input; // super simple input this time, just a string
 
-  const outcomes = []
+  // let PIECE_COUNT = 2022 // part 1
+  let PIECE_COUNT = 1000000000000 // part 2
+  // NOTE: first attempt without pre-populating the tower was too high: 1586206896526
+  // now I get:                                                         1586206896526
 
-  while (count--) {
-    const rock = ROCKS[i].map(v => v + (highest + 4) * 7)
-    while (true) {
-      if (input[j] === '<') {
-        if (
-          rock.every(v => v % 7 !== 0) &&
-          rock.every(v => !blocked.has(v - 1))
-        ) {
-          rock.forEach((v, i, arr) => {
-            arr[i] = v - 1
-          })
-        }
-      } else {
-        if (
-          rock.every(v => v % 7 !== 6) &&
-          rock.every(v => !blocked.has(v + 1))
-        ) {
-          rock.forEach((v, i, arr) => {
-            arr[i] = v + 1
-          })
-        }
+  let windIndex = 0;
+
+  let EMPTY = 0b100000001
+  
+  // pieces are 'upside-down' - since lower index is lower chamber index,
+  // only affects pieces[2]
+  let pieces = [
+    [
+      0b000111100,
+    ],
+    [
+      0b000010000,
+      0b000111000,
+      0b000010000,
+    ],
+    [
+      0b000111000, // upside-down
+      0b000001000,
+      0b000001000,
+    ],
+    [
+      0b000100000,
+      0b000100000,
+      0b000100000,
+      0b000100000,
+    ],
+    [
+      0b000110000,
+      0b000110000,
+    ],
+  ]
+
+  const chamber = [
+    0b111111111,
+  ]
+
+  // there will always be 7 empty lines at the top when starting and after a drop,
+  // three below the drop piece and 4 for the drop piece.  So `chamber.length - 8`
+  // is the tower height
+  const fillChamber = () => {
+    let i = chamber.length - 1
+    for (; i > 0 && chamber[i] === EMPTY; i--); // i will be index of last non-empty row
+    while (chamber.length < i + 8) chamber.push(EMPTY)
+  }
+
+  const getTowerHeight = () => chamber.length - 8
+
+  fillChamber() // start with 7 empty rows at top
+
+  // helper function to give a string line for a value.  If a second
+  // value is passed, it is treated as a dropping piece, using '@' instead of '#',
+  // and 'X' for conflicts (dropped piece and wall or frozen piece)
+  const output = (value, value2) => {
+    value2 = value2 || 0
+    var parts = []
+    while (value > 0) {
+      let test = 0b100000000
+      while (test > 0) {
+        let ch = value & test ? '#' : '.' // '#' if set, '.' if not
+        if (ch === '#' && (value === 0b100000000 || value === 0b000000001)) ch = '|' // wall
+        if (value2 & test) ch = (ch === '.') ? '@' : 'X' // dropping piece or conflict 'X'
+        parts.push(ch)
+        test = test >> 1
       }
-      j++
-      if (j >= input.length) j -= input.length
-      if (rock.every(v => !blocked.has(v - 7))) {
-        rock.forEach((v, i, arr) => {
-          arr[i] = v - 7
-        })
+      return parts.join('')
+    }
+  }
+
+  // show an array of lines (piece or chamber) in the console
+  const show = lines => {
+    for (let i = lines.length - 1; i >= 0; i--) console.log(output(lines[i]))
+  }
+
+  // helper functions
+  let slideLeft = value => value << 1
+  let slideRight = value => value >> 1
+
+  // test for a conflict with a piece (which could be shifted left or
+  // right) placed on a line in the chamber
+  const conflictAt = (index, piece) => {
+    return piece.reduce((p, c, i) => {
+      return p || ((c & chamber[index + i]) > 0)
+    }, false)
+  }
+
+  // drop a piece per puzzle spec, 3 empty lines above the top
+  // tower line.  Initial piece is already in correct x position
+  // by definition above
+  const dropPiece = (piece) => {
+    let dropIndex = chamber.length - 4
+
+    while (dropIndex >= 0) {
+      let wind = winds[windIndex] // get current wind
+      windIndex = (windIndex + 1) % winds.length // move to next wind
+      let slid = piece.map(wind === '<' ? slideLeft : slideRight) // calculate piece moved by wind
+      if (!conflictAt(dropIndex, slid)) piece = slid // allow wind move if it didn't hit something
+      if (conflictAt(dropIndex-1, piece)) break // if dropping would hit something, exit
+      dropIndex--
+    }
+
+    piece.forEach((value, i) => {
+      chamber[dropIndex + i] |= value
+    })
+    fillChamber()
+  }
+
+  // key will be `'${pieceIndex},${windIndex}'`.   When we find
+  // a match, we've found a cycle.  Value will be `{ pieceCount, height }`.
+  // By taking '(current pieceCount) - (saved pieceCount)' we get how many
+  // pieces in the cycle, and by taking '(current height) - (saved height)'
+  // we get how much height is added by the cycle.  Then we can add a multiple
+  // of each to pieceCount and height to skip a whole lot.  We do this by
+  // setting 'addedHeight' and increasing pieceCount
+  const heights = {}
+  let addedHeight = 0
+
+  for (let pieceCount = 0; pieceCount < PIECE_COUNT; pieceCount++) {
+    let pieceIndex = pieceCount % pieces.length
+    let piece = pieces[pieceIndex]
+    dropPiece(piece)
+    if ((addedHeight === 0) && (pieceCount > (winds.length * pieces.length))) {
+      let key = `${pieceIndex},${windIndex}`
+      let info = { pieceCount, height: getTowerHeight() }
+      if (heights[key]) {
+        // we found a cycle, hurray!
+        let cyclePieces = info.pieceCount - heights[key].pieceCount
+        let cycleHeight = info.height - heights[key].height
+        console.log(`Found cycle ${key} of ${cyclePieces} pieces giving height ${cycleHeight}`)
+        console.log(`  Previous: ${JSON.stringify(heights[key])}`)
+        console.log(`  Current : ${JSON.stringify(info)}`)
+
+        let cycles = Math.trunc((PIECE_COUNT - pieceCount) / cyclePieces)
+        addedHeight = cycleHeight * cycles
+        pieceCount += cyclePieces * cycles
       } else {
-        rock.forEach(v => blocked.add(v))
-        const high = Math.floor(rock[rock.length - 1] / 7)
-        const increase = Math.max(0, high - highest)
-        outcomes.push(increase)
-        highest += increase
-        const state = j * ROCKS.length + i
-        if (visited.has(state)) {
-          const pastVisits = visited.get(state)
-          pastVisits.push(outcomes.length - 1)
-          const cycleLength = findPattern(pastVisits, outcomes)
-          if (cycleLength) {
-            const q = Math.floor(count / cycleLength)
-            const r = count % cycleLength
-            return (
-              highest +
-              q * outcomes.slice(-cycleLength).reduce((sum, v) => sum + v, 0) +
-              outcomes
-                .slice(-cycleLength, -cycleLength + r)
-                .reduce((sum, v) => sum + v, 0)
-            )
-          }
-        } else {
-          visited.set(state, [outcomes.length - 1])
-        }
-        break
+        heights[key] = info
       }
     }
-    i++
-    if (i >= ROCKS.length) i -= ROCKS.length
   }
-  return highest
-}
 
-function findPattern (pastVisits, outcomes) {
-  const lastIndex = pastVisits[pastVisits.length - 1]
-  for (let i = 0; i < pastVisits.length - 1; i++) {
-    const testIndex = pastVisits[i]
-    const cycleLength = lastIndex - testIndex
-    if (testIndex + 1 < cycleLength) continue
-    let j = 0
-    while (j < cycleLength) {
-      if (outcomes[lastIndex - j] !== outcomes[testIndex - j]) break
-      j++
-    }
-    if (j === cycleLength) return cycleLength
-  }
-  return 0
-}
+  console.log(getTowerHeight() + addedHeight);
 
-const test = require('fs').readFileSync('input').toString().slice(0, -1);
-
-console.log(rockFall(test))
-console.log(rockFall(test, 1000000000000))
