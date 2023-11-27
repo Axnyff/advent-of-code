@@ -7,5 +7,4 @@ Me doing advent of code in different programming languages
 5. [2019](https://github.com/Axnyff/advent-of-code/tree/master/2019)
 6. [2020](https://github.com/Axnyff/advent-of-code/tree/master/2020)
 7. [2021](https://github.com/Axnyff/advent-of-code/tree/master/2021)
-
-
+8. [2022](https://github.com/Axnyff/advent-of-code/tree/master/2022)
