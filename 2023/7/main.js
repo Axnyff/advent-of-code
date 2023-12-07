@@ -55,12 +55,11 @@ const scoreHand2 = (hand, noRec) => {
   if (jokers === 2) {
     if (jokers && !noRec && !saw[hand]) {
       saw[hand] = true;
-      console.log(hand, scoreHand2(hand, true));
     }
     if (array[0][0] !== "J") {
       return array[0][1] + jokers === 5 ? 1 : 2;
     }
-    return 4;
+    return 5;
   }
 
 
@@ -101,7 +100,6 @@ const handBiggerThan = (handA, handB) => {
       return orderA < orderB;
     }
   }
-  console.log(handA, handB);
   throw new Error("oh no");
 };
 
@@ -119,7 +117,6 @@ const handBiggerThan2 = (handA, handB) => {
       return orderA < orderB;
     }
   }
-  console.log(handA, handB);
   throw new Error("oh no");
 };
 
@@ -142,4 +139,3 @@ console.log(score);
 const hands2 = handsData.sort((a, b) => handBiggerThan2(a, b) ? 1 : -1);
 const score2 = hands2.reduce((score, hand, index) => score + hand[1] * (index + 1), 0);
 console.log(score2);
-console.log(scoreHand2("J8JJJ"));
