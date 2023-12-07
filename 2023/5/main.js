@@ -91,4 +91,3 @@ for (let interval of intervals) {
   }
 }
 console.log(min);
-
