@@ -121,7 +121,7 @@ const handBiggerThan2 = (handA, handB) => {
 };
 
 const handsData = require("fs")
-  .readFileSync(process.argv[2])
+  .readFileSync("input")
   .toString()
   .slice(0, -1)
   .split("\n")
