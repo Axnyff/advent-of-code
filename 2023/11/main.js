@@ -8,8 +8,8 @@ lines.forEach((l, y) => {
   });
 });
 
-const rows = stars.map(el => el[0]);
-const cols = stars.map(el => el[1]);
+const rows = new Set(stars.map(el => el[0]));
+const cols = new Set(stars.map(el => el[1]));
 
 let total = 0;
 for (let i = 0; i < stars.length; i++) {
@@ -18,14 +18,14 @@ for (let i = 0; i < stars.length; i++) {
     const [x2, y2] = stars[j];
     let subtotal = 0;
     for (let k = Math.min(x, x2); k < Math.max(x, x2); k++) {
-      if (rows.includes(k)) {
+      if (rows.has(k)) {
         subtotal += 1;
       } else {
         subtotal += 2;
       }
     }
     for (let k = Math.min(y, y2); k < Math.max(y, y2); k++) {
-      if (cols.includes(k)) {
+      if (cols.has(k)) {
         subtotal += 1;
       } else {
         subtotal += 2;
@@ -44,14 +44,14 @@ for (let i = 0; i < stars.length; i++) {
     const [x2, y2] = stars[j];
     let subtotal = 0;
     for (let k = Math.min(x, x2); k < Math.max(x, x2); k++) {
-      if (rows.includes(k)) {
+      if (rows.has(k)) {
         subtotal += 1;
       } else {
         subtotal += ratio;
       }
     }
     for (let k = Math.min(y, y2); k < Math.max(y, y2); k++) {
-      if (cols.includes(k)) {
+      if (cols.has(k)) {
         subtotal += 1;
       } else {
         subtotal += ratio;
