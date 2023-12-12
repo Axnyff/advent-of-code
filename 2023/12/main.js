@@ -10,6 +10,19 @@ const patternMatch = (pattern, items) => {
 };
 
 
+const slowCountArrangements = (pattern, nbs) => {
+  let possibles = [""];
+  for (let c of pattern) {
+    if (c === "?") {
+      possibles = possibles.flatMap(c => [c + ".", c + "#"]);
+    } else {
+      possibles = possibles.map(a => a + c);
+    }
+  }
+  return possibles.filter(p => patternMatch(p, nbs)).length;
+
+};
+
 const transformPattern = p => [p, p, p, p, p].join("?");
 const transformNbs = nbs => [nbs, nbs, nbs, nbs, nbs].join(",").split(",").map(Number);
 
