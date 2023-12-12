@@ -26,6 +26,48 @@ const slowCountArrangements = (pattern, nbs) => {
 const transformPattern = p => [p, p, p, p, p].join("?");
 const transformNbs = nbs => [nbs, nbs, nbs, nbs, nbs].join(",").split(",").map(Number);
 
+
+
+const countArrangementsBetter = (pattern, nbs) => {
+  if (nbs.reduce((a, b) => a + b, 0) > pattern.split("").filter(el => el !== ".").length) {
+    return 0;
+  }
+  if (nbs.length === 0 && pattern.includes("#")) {
+    return 0;
+  }
+  if (nbs.length === 0 && !pattern.includes("#")) {
+    return 1;
+  }
+  if (nbs.length !== 0 && !pattern.includes("#") && !pattern.includes("?")) {
+    return 0;
+  }
+  let i = 0;
+  while (pattern[i] === ".") {
+    i++;
+  }
+
+  let cantMatch = false;
+  for (let j = i; j < nbs[0] + i; j++) {
+    if (pattern[j] === "." || !pattern[j]) {
+      cantMatch = true;
+      break;
+    }
+  }
+  let res1 = 0;
+  if (pattern[i + nbs[0]] !== "#" && !cantMatch) {
+    res1 = countArrangementsBetter(pattern.slice(i + nbs[0] + 1), nbs.slice(1));
+  }
+
+  let res2 = 0;
+  let value = pattern.slice(i, nbs[0]);
+  if (pattern[i] === "?") {
+    res2 = countArrangementsBetter(pattern.slice(i + 1), nbs);
+  }
+  return res1 + res2;
+};
+
+
+
 let memo = {};
 const countArrangements = (pattern, nbs) => {
   if (memo[pattern + nbs.length] !== undefined) {
