@@ -4,7 +4,7 @@ let yMax = 0;
 let xMax = 0;
 const key = (x, y) => x + "," + y;
 require("fs")
-  .readFileSync("test-input")
+  .readFileSync("input")
   .toString()
   .slice(0, -1)
   .split("\n")
@@ -47,7 +47,7 @@ const computeTotal = () => {
   return total;
 };
 
-const dirs = ["N", "W", "S", "E"]
+const dirs = ["N", "W", "S", "E"];
 
 const advanceGraph = (i) => {
   let newGraph = {};
@@ -62,11 +62,11 @@ const advanceGraph = (i) => {
           newGraph[k] = "#";
         } else if (graph[k] === "O") {
           let i = y;
-          while (i >= 0 && !newGraph[key(x, i -1)]) {
+          while (i >= 0 && !newGraph[key(x, i - 1)]) {
             i--;
           }
           i = Math.max(0, i);
-          newGraph[key(x, i)] = "O"
+          newGraph[key(x, i)] = "O";
         }
       }
     }
@@ -83,7 +83,7 @@ const advanceGraph = (i) => {
             i++;
           }
           i = Math.min(xMax, i);
-          newGraph[key(i, y)] = "O"
+          newGraph[key(i, y)] = "O";
         }
       }
     }
@@ -100,7 +100,7 @@ const advanceGraph = (i) => {
             i--;
           }
           i = Math.max(0, i);
-          newGraph[key(i, y)] = "O"
+          newGraph[key(i, y)] = "O";
         }
       }
     }
@@ -113,20 +113,20 @@ const advanceGraph = (i) => {
           newGraph[k] = "#";
         } else if (graph[k] === "O") {
           let i = y;
-          while (i <= yMax && !newGraph[key(x, i +1)]) {
+          while (i <= yMax && !newGraph[key(x, i + 1)]) {
             i++;
           }
           i = Math.min(yMax, i);
-          newGraph[key(x, i)] = "O"
+          newGraph[key(x, i)] = "O";
         }
       }
     }
   }
-  return newGraph
+  return newGraph;
 };
 const graphs = new Map();
 
-let amount = 1_000_000_000 * 4
+let amount = 1_000_000_000 * 4;
 let iterations = 0;
 let counts = 0;
 let remaining = 0;
@@ -136,21 +136,11 @@ for (let i = 0; i < amount; i++) {
   let show = showGraph();
   if (graphs.has(show)) {
     interval = i - graphs.get(show);
-    remaining = amount - i;
-    counts = (amount - i) % interval;
-    console.log(counts);
-    break;
+    while (i < amount - 40) {
+      i += interval;
+    }
   }
   graphs.set(show, i);
 }
-
-console.log(remaining, interval);
-console.log(remaining % interval);
-for (let i = 0; i < 15; i++) {
-  graph = advanceGraph(i);
-
-}
 console.log(computeTotal());
 
-// bigger than 1255
-// bigger than 98323
