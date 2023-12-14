@@ -146,7 +146,7 @@ for (let i = 0; i < amount; i++) {
 
 console.log(remaining, interval);
 console.log(remaining % interval);
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 14; i++) {
   graph = advanceGraph(i);
 
 }
