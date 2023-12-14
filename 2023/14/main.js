@@ -4,7 +4,7 @@ let yMax = 0;
 let xMax = 0;
 const key = (x, y) => x + "," + y;
 require("fs")
-  .readFileSync("test-input")
+  .readFileSync("input")
   .toString()
   .slice(0, -1)
   .split("\n")
@@ -135,7 +135,7 @@ for (let i = 0; i < amount; i++) {
   let show = showGraph();
   if (graphs.has(show)) {
     let interval = i - graphs.get(show);
-    i += Math.round((amount - i) / interval) * interval;
+    i += Math.floor((amount - i) / interval) * interval;
   }
   graphs.set(show, i);
 }
