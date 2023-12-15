@@ -1,0 +1,57 @@
+const items = require("fs")
+  .readFileSync("test-input")
+  .toString()
+  .slice(0, -1)
+  .split(",");
+
+const algo = (input) => {
+  let v = 0;
+  for (let c of input) {
+    const code = c.charCodeAt(0);
+    v += code;
+    v *= 17;
+    v %= 256;
+  }
+  return v;
+};
+
+console.log(items.map(algo).reduce((a, b) => a + b));
+
+let boxes = new Map();
+
+const setIn = (hash, item) => {
+  if (boxes.has(hash)) {
+    let box = boxes.get(hash);
+    console.log(box, item);
+    for (let i of box) {
+      console.log(i);
+    }
+    if (box.some((boxItem) => boxItem[0][0] === item[0])) {
+      console.log("WESH");
+      box = box.map((boxItem) => {
+        console.log(boxItem[0][0]);
+        console.log(boxItem[0][0] === item[0]);
+        return boxItem[0][0] === item[0] ? item : boxItem;
+      });
+    } else {
+      boxes.get(hash).push([item]);
+    }
+  } else {
+    boxes.set(hash, [item]);
+  }
+};
+for (let item of items) {
+  if (item.includes("=")) {
+    let [label, num] = item.split("=");
+    const hash = algo(label);
+    setIn(hash, [label, Number(num)]);
+  } else {
+    let label = item.slice(0, -1);
+    const hash = algo(label);
+    boxes.set(
+      hash,
+      (boxes.get(hash) || []).filter(([l]) => l !== label)
+    );
+  }
+  console.log(JSON.stringify(Object.fromEntries(boxes)));
+}
