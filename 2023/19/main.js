@@ -94,6 +94,29 @@ const processInterval = (raw_intervals) => {
 
   return true_result;
 };
+
+let current = [["in"]];
+let res = [];
+while (current.length) {
+  let newCurrent = [];
+  for (let item of current) {
+    let key = item.at(-1);
+    for (let sub of cond[key]) {
+      // handle fucking not
+      if (sub.at(-1) !== "A" && sub.at(-1) !== "R") {
+        newCurrent.push([...item, ...sub]);
+      } else {
+        if (sub.at(-1) === "A") {
+          res.push([...item, ...sub]);
+        }
+      }
+    }
+  }
+  current = newCurrent;
+}
+console.log(res);
+return;
+
 let as = processInterval(intervals.a);
 let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
