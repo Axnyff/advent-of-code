@@ -104,10 +104,10 @@ while (current.length) {
     for (let sub of cond[key]) {
       // handle fucking not
       if (sub.at(-1) !== "A" && sub.at(-1) !== "R") {
-        newCurrent.push([...item.slice(1), ...sub]);
+        newCurrent.push([...item, ...sub]);
       } else {
         if (sub.at(-1) === "A") {
-          res.push([...item.slice(1), ...sub]);
+          res.push([...item, ...sub]);
         }
       }
     }
