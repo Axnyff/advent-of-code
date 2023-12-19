@@ -1,5 +1,5 @@
 const cond = {};
-const [raw_cond, raw_parts] = require("fs").readFileSync("test-input").toString().slice(0, -1).split("\n\n");
+const [raw_cond, raw_parts] = require("fs").readFileSync("input").toString().slice(0, -1).split("\n\n");
 
 raw_cond.split("\n").forEach(c => {
   const [name, steps] = c.split("{");
@@ -65,8 +65,7 @@ for (let c of Object.values(cond)) {
 }
 
 const processInterval = (raw_intervals) => {
-  console.log(raw_intervals);
-  let intervals = raw_intervals.map(i => {
+  let intervals = [...new Set(raw_intervals)].map(i => {
     const sign = i[1];
     const bound = Number(i.slice(2))
     return [bound, sign];
@@ -100,8 +99,10 @@ let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
 let ss = processInterval(intervals.s);
 
+console.log(as.length);
 let total2 = 0;
 for (let a of as) {
+  console.log(a, as.indexOf(a));
   for (let x of xs) {
     for (let m of ms) {
       for (let s of ss ) {
@@ -112,4 +113,6 @@ for (let a of as) {
     }
   }
 }
+// do a list of all the possible conditions
+
 console.log(total2, total2 === 167409079868000 ? "Correct": "Wrong");
