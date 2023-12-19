@@ -93,8 +93,9 @@ const processInterval = (interval) => {
 };
 let as = processInterval(intervals.a);
 as.splice(1, 1);
-as[0][1]++;
+// as[0][1]++;
 as[1][0]--;
+console.log(as);
 let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
 let ss = processInterval(intervals.s);
@@ -120,4 +121,4 @@ for (let a of as) {
     }
   }
 }
-console.log(total2);
+console.log(total2, total2 === 167409079868000 ? "Correct": "Wrong");
