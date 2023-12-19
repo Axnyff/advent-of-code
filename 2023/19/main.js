@@ -103,6 +103,9 @@ let ss = processInterval(intervals.s);
 
 let total2 = 0;
 console.log(as);
+console.log(xs);
+console.log(ms);
+console.log(ss);
 for (let a of as) {
   for (let x of xs) {
     for (let m of ms) {
