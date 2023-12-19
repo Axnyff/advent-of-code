@@ -65,6 +65,7 @@ for (let c of Object.values(cond)) {
 }
 
 const processInterval = (raw_intervals) => {
+  console.log(raw_intervals);
   let intervals = raw_intervals.map(i => {
     const sign = i[1];
     const bound = Number(i.slice(2))
@@ -76,9 +77,9 @@ const processInterval = (raw_intervals) => {
   for (let [bound, sign] of intervals) {
     if (sign === ">") {
       result.push([prev, bound]);
-      prev = bound - 1;
+      prev = bound + 1;
     } else {
-      result.push([prev, bound +1]);
+      result.push([prev, bound -1]);
       prev = bound;
     }
   }
@@ -88,6 +89,9 @@ const processInterval = (raw_intervals) => {
   for (let i = 0; i < result.length - 1; i+=2 ) {
     true_result.push(result[i], result[i + 1]);
   }
+  if (true_result[true_result.length -1][1] !== 4000) {
+    true_result.push([true_result[true_result.length -1][1] + 1, 4000]);
+  }
 
   return true_result;
 };
@@ -95,24 +99,14 @@ let as = processInterval(intervals.a);
 let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
 let ss = processInterval(intervals.s);
-console.log(as);
-console.log(xs);
-console.log(ms);
-console.log(ss);
-
-// console.log(as.reduce((a, b) => a + b[1] - b[0] + 1, 0));
-// console.log(xs.reduce((a, b) => a + b[1] - b[0] + 1, 0));
-// console.log(ms.reduce((a, b) => a + b[1] - b[0] + 1, 0));
-// console.log(ss.reduce((a, b) => a + b[1] - b[0] + 1, 0));
 
 let total2 = 0;
 for (let a of as) {
-  console.log(a);
   for (let x of xs) {
     for (let m of ms) {
       for (let s of ss ) {
         if (evalResult({a: a[0], x: x[0], m: m[0], s: s[0] }) === "A") {
-          total2 += (a[1] - a[0]) * (x[1] - x[0]) * (m[1] - m[0]) * (s[1] - s[0]);
+          total2 += (a[1] - a[0] + 1) * (x[1] - x[0] + 1) * (m[1] - m[0] + 1) * (s[1] - s[0] + 1);
         }
       }
     }
