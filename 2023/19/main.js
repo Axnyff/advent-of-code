@@ -92,6 +92,9 @@ const processInterval = (interval) => {
   return intervals;
 };
 let as = processInterval(intervals.a);
+as.splice(1, 1);
+as[0][1]++;
+as[1][0]--;
 let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
 let ss = processInterval(intervals.s);
