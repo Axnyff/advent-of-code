@@ -1,5 +1,5 @@
 const cond = {};
-const [raw_cond, raw_parts] = require("fs").readFileSync("test-input").toString().slice(0, -1).split("\n\n");
+const [raw_cond, raw_parts] = require("fs").readFileSync("input").toString().slice(0, -1).split("\n\n");
 
 raw_cond.split("\n").forEach(c => {
   const [name, steps] = c.split("{");
@@ -101,41 +101,62 @@ while (current.length) {
   let newCurrent = [];
   for (let item of current) {
     let key = item.at(-1);
-    for (let sub of cond[key]) {
-      // handle fucking not
-      if (sub.at(-1) !== "A" && sub.at(-1) !== "R") {
-        newCurrent.push([...item, ...sub]);
-      } else {
-        if (sub.at(-1) === "A") {
-          res.push([...item, ...sub]);
+    let conditions = [];
+    for (let i = 0; i < cond[key].length; i++) {
+      let condition = cond[key][i][0];
+      let dir = cond[key][i][1];
+      if (dir === undefined) {
+        dir = condition;
+        if (dir === "A") {
+          res.push([...item.slice(0, -1), ...conditions]);
+        } else if (dir !== "R") {
+          newCurrent.push([...item.slice(0, -1), ...conditions, dir]);
         }
+      } else {
+        if (dir === "A") {
+          res.push([...item.slice(0, -1), ...conditions, condition]);
+        } else if (dir !== "R") {
+          newCurrent.push([...item.slice(0, -1), ...conditions, condition, dir]);
+        }
+        conditions.push("not " + condition);
       }
     }
   }
   current = newCurrent;
 }
-console.log(res);
-return;
 
-let as = processInterval(intervals.a);
-let xs = processInterval(intervals.x);
-let ms = processInterval(intervals.m);
-let ss = processInterval(intervals.s);
-
-console.log(as.length);
 let total2 = 0;
-for (let a of as) {
-  console.log(a, as.indexOf(a));
-  for (let x of xs) {
-    for (let m of ms) {
-      for (let s of ss ) {
-        if (evalResult({a: a[0], x: x[0], m: m[0], s: s[0] }) === "A") {
-          total2 += (a[1] - a[0] + 1) * (x[1] - x[0] + 1) * (m[1] - m[0] + 1) * (s[1] - s[0] + 1);
-        }
-      }
+
+
+for (let item of res) {
+  let start = {
+    x: [1, 4000],
+    s: [1, 4000],
+    a: [1, 4000],
+    m: [1, 4000],
+  };
+
+  for (let part of item) {
+    let isNot = part.startsWith("not");
+    let target = isNot ? part[4] : part[0];
+    let sign = isNot ? part[5] : part[1];
+    let bound = Number(isNot ? part.slice(6) : part.slice(2));
+
+    if (sign === "<" && !isNot) {
+      start[target][1] = Math.min(bound - 1, start[target][1]);
+    }
+    if (sign === ">" && isNot) {
+      start[target][1] = Math.min(bound, start[target][1]);
+    }
+    if (sign === ">" && !isNot) {
+      start[target][0] = Math.max(bound + 1, start[target][0]);
+    }
+    if (sign === "<" && isNot) {
+      start[target][0] = Math.max(bound, start[target][0]);
     }
   }
+  total2 += (start.x[1] - start.x[0] + 1) * (start.s[1] - start.s[0] + 1) * (start.a[1] - start.a[0] + 1) * (start.m[1] - start.m[0] + 1);
 }
-// do a list of all the possible conditions
 
-console.log(total2, total2 === 167409079868000 ? "Correct": "Wrong");
+
+console.log(total2);
