@@ -76,9 +76,9 @@ const processInterval = (raw_intervals) => {
   for (let [bound, sign] of intervals) {
     if (sign === ">") {
       result.push([prev, bound]);
-      prev = bound + 1;
+      prev = bound - 1;
     } else {
-      result.push([prev, bound -1]);
+      result.push([prev, bound +1]);
       prev = bound;
     }
   }
