@@ -48,6 +48,7 @@ for (let part of parts) {
     total += part.x + part.m + part.a + part.s;
   }
 }
+console.log(total);
 
 const intervals = {
   a: [],
@@ -64,8 +65,10 @@ for (let c of Object.values(cond)) {
 }
 
 const processInterval = (interval) => {
+  console.log("process");
   let result = [[1, 4000]];
   for (let a of interval) {
+    console.log(a);
     let bound = Number(a.slice(2));
     let sign = a[1];
     result = result.flatMap(([start, end]) => {
@@ -81,22 +84,35 @@ const processInterval = (interval) => {
       return [[start, bound - 1], [bound, end]];
     });
   }
-  result = result.filter(([start, end]) => end > start);
-  let newRes = [];
-  let start = 1;
-  for (let r of result) {
-    let [s, e] = r;
-    if (s < start) {
-      s = start + 1;
-    }
-    newRes.push([s, e]);
-    start = e;
+  result = [...new Set(result.flat())].sort((a, b) => a - b);
+  let intervals = [];
+  for (let i = 0; i < result.length - 1; i++) {
+    intervals.push([i === 0 ? result[i]: result[i] +1 , result[i + 1]]);
   }
-  return newRes;
+
+  return intervals;
 };
 let as = processInterval(intervals.a);
 let xs = processInterval(intervals.x);
 let ms = processInterval(intervals.m);
 let ss = processInterval(intervals.s);
 
-console.log(as, xs, ms, ss);
+// console.log(as.reduce((a, b) => a + b[1] - b[0] + 1, 0));
+// console.log(xs.reduce((a, b) => a + b[1] - b[0] + 1, 0));
+// console.log(ms.reduce((a, b) => a + b[1] - b[0] + 1, 0));
+// console.log(ss.reduce((a, b) => a + b[1] - b[0] + 1, 0));
+
+let total2 = 0;
+console.log(as);
+for (let a of as) {
+  for (let x of xs) {
+    for (let m of ms) {
+      for (let s of ss ) {
+        if (evalResult({a: a[0], x: x[0], m: m[0], s: s[0] }) === "A") {
+          total2 += (a[1] - a[0] + 1) * (x[1] - x[0] + 1) * (m[1] - m[0] + 1) * (s[1] - s[0] + 1);
+        }
+      }
+    }
+  }
+}
+console.log(total2);
