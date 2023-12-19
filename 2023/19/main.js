@@ -1,5 +1,5 @@
 const cond = {};
-const [raw_cond, raw_parts] = require("fs").readFileSync("input").toString().slice(0, -1).split("\n\n");
+const [raw_cond, raw_parts] = require("fs").readFileSync("test-input").toString().slice(0, -1).split("\n\n");
 
 raw_cond.split("\n").forEach(c => {
   const [name, steps] = c.split("{");
@@ -104,10 +104,10 @@ while (current.length) {
     for (let sub of cond[key]) {
       // handle fucking not
       if (sub.at(-1) !== "A" && sub.at(-1) !== "R") {
-        newCurrent.push([...item, ...sub]);
+        newCurrent.push([...item.slice(1), ...sub]);
       } else {
         if (sub.at(-1) === "A") {
-          res.push([...item, ...sub]);
+          res.push([...item.slice(1), ...sub]);
         }
       }
     }
