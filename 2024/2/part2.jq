@@ -1,5 +1,5 @@
 def is_safe(f; can_ignore):
-reduce f as $item (null;
+reduce (if can_ignore == true then .[] else .[1:] | .[] end) as $item (null;
     if . == null then 
       $item 
     else 
@@ -28,4 +28,4 @@ reduce f as $item (null;
     )
     end) | if . == false then false else true end;
 
-. | split("\n") | .[] | split(" ") | [.[] | tonumber] | is_safe(.[]; true) or is_safe(.[1:]; false) | select(. == true)
+. | split("\n") | .[] | split(" ") | [.[] | tonumber] | is_safe(.[]; true) or is_safe(.[]; false) | select(. == true)
