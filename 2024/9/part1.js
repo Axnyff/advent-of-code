@@ -1,12 +1,11 @@
-const data = require("fs").readFileSync("test-input").toString().trim().split("").map(Number);
-console.log(data);
+const data = require("fs").readFileSync("input").toString().trim().split("").map(Number);
 
 const result = [];
 let start = 0;
 let end = data.length - 1;
 
+let consumedEnd = 0;
 while (start < end) {
-  let consumedEnd = 0;
   const item = data[start];
   for (let i = 0; i < item; i++) {
     result.push(start / 2)
@@ -24,10 +23,13 @@ while (start < end) {
       endItem = data[end];
     }
   }
-  console.log("\n");
 }
-console.log(result);
-console.log(result.join(""));
-console.log("0099811188827773336446555566");
-p
-for (let 
+for (let i = consumedEnd; i < data[end]; i++) {
+  result.push(end / 2);
+}
+
+let total = 0;
+for (let i = 0; i < result.length; i++) {
+  total += i * result[i]
+}
+console.log(total);
