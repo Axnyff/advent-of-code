@@ -1,36 +1,37 @@
-const data = require("fs").readFileSync("test-input").toString().trim().split("").map(Number);
+const data = require("fs").readFileSync("input").toString().trim().split("").map(Number);
 
 const result = [];
 let start = 0;
 let consumedEnds = [];
 
 let freeIndex = 1;
-outer: while (true) {
+let end = data.length - 1;
+outer: while (start < data.length) {
+  if (start % 1000 === 0) {
+    console.log(start);
+  }
   const item = data[start];
   for (let i = 0; i < item; i++) {
-    result.push(start / 2)
-  }
-  start += 2;
-  while (consumedEnds.includes(start)) {
-    start += 2;
-    if (start > data.length) {
-      break outer;
+    if (consumedEnds.includes(start)) {
+      result.push(0);
+    } else {
+      result.push(start / 2)
     }
   }
-  console.log("First", result.join(""));
+  start += 2;
 
-  let end = data.length - 1;
+  let currentEnd = end;
 
   let free = data[freeIndex];
-  console.log(free, freeIndex);
-  outer2: while (free > 0) {
-    while (consumedEnds.includes(end) || data[end] > free) {
+  while (free > 0 ) {
+    while (consumedEnds.includes(currentEnd) || data[currentEnd] > free) {
       end -= 2;
       if (end <= start) {
         for (let i = 0; i < free; i++) {
           result.push(0);
-          break outer2;
+          break;
         }
+        free = 0;
       }
     }
     const item2 = data[end];
@@ -40,15 +41,12 @@ outer: while (true) {
         result.push(end / 2)
       }
     }
-    free -= data[end];
+    free -= item2;
   }
 
 
-  console.log("Second", result.join(""));
   freeIndex += 2;
 }
-console.log(result.join(""));
-console.log("00992111777.44.333....5555.6666.....8888..");
 let total = 0;
 for (let i = 0; i < result.length; i++) {
   total += i * result[i]
