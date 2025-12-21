@@ -1,8 +1,5 @@
-const lines = require("fs")
-  .readFileSync("input")
-  .toString()
-  .slice(0, -1)
-  .split("\n");
+const fs = require("fs");
+const lines = fs.readFileSync("input").toString().slice(0, -1).split("\n");
 
 const graph = {};
 
@@ -32,6 +29,7 @@ let res = ``;
 Object.entries(graph).forEach(([key, content]) => {
   res += `${key}: ${content.join(" ")}\n`;
 });
+fs.writeFileSync("input2", res);
 
 console.log(Object.keys(graph).length);
 return;
