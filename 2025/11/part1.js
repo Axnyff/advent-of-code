@@ -1,4 +1,8 @@
-const lines = require("fs").readFileSync("input").toString().slice(0, -1).split("\n");
+const lines = require("fs")
+  .readFileSync("input")
+  .toString()
+  .slice(0, -1)
+  .split("\n");
 
 const graph = {};
 
@@ -7,21 +11,30 @@ for (line of lines) {
   graph[a] = ends.split(" ");
 }
 
-let toExplore = new Set(graph.you.map(el => [el].join(",")));
-
-let paths = 0;
-while (toExplore.size) {
-  const newToExplore = new Set();
-  for (let item of toExplore) {
-    const splitted = item.split(",");
-    for (let newPath of graph[splitted.at(-1)]) {
-      if (newPath === "out") {
-        paths++;
-      } else if (!splitted.includes(newPath)) {
-        newToExplore.add([...splitted, newPath].join(","));
+const explore = (start, end) => {
+  let paths = 0;
+  let toExplore = {};
+  for (let item of graph[start]) {
+    toExplore[item] = 1;
+  }
+  while (Object.keys(toExplore).length) {
+    const newToExplore = {};
+    for (let item of Object.keys(toExplore)) {
+      for (let newPath of graph[item]) {
+        if (newPath === end) {
+          paths += toExplore[item];
+        } else {
+          if (newToExplore[newPath]) {
+            newToExplore[newPath] += toExplore[item];
+          } else {
+            newToExplore[newPath] = toExplore[item];
+          };
+        }
       }
     }
     toExplore = newToExplore;
   }
-}
-console.log(paths)
+  return paths;
+};
+
+console.log(explore("you", "out"));
