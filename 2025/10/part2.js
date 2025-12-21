@@ -30,6 +30,8 @@ const findTarget = (finalTarget, possibles, acc = []) => {
     let matches = findMatches(target, possibles);
 
     const result = [];
+    console.log(matches);
+    return;
     for (let [add, count] of matches.sort((a, b) => b.length - a.length)) {
       const newTarget = finalTarget.map((el, i) => (el - add[i]) / 2);
 

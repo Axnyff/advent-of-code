@@ -17,11 +17,13 @@ def solve_single(coeffs: list[tuple[int, ...]], goal: tuple[int, ...]) -> int:
     pattern_costs = patterns(coeffs)
     print(goal)
     def solve_single_aux(goal: tuple[int, ...], acc = None) -> int:
+        print(pattern_costs[tuple(i%2 for i in goal)].items())
         acc = acc or []
         if all(i == 0 for i in goal):
             print(acc)
             return 0
         answer = 1000000
+        return
         for pattern, pattern_cost in pattern_costs[tuple(i%2 for i in goal)].items():
             if all(i <= j for i, j in zip(pattern, goal)):
                 new_goal = tuple((j - i)//2 for i, j in zip(pattern, goal))
