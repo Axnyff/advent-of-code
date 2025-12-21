@@ -11,18 +11,29 @@ for (line of lines) {
   graph[a] = ends.split(" ");
 }
 
+console.log(Object.keys(graph).length);
+
+let simplified = true;
+while (simplified) {
+  simplified = false;
+  Object.entries(graph).forEach(([key, content]) => {
+    if (content.length === 1) {
+      Object.keys(graph).forEach((key2) => {
+        if (graph[key2]?.includes(key)) {
+          simplified = true;
+          delete graph[key];
+          graph[key2] = graph[key2].filter((el) => el !== key);
+        }
+      });
+    }
+  });
+}
+let res = ``;
 Object.entries(graph).forEach(([key, content]) => {
-  if (content.length === 1) {
-    Object.keys(graph).forEach((key2) => {
-      if (graph[key2].includes(key)) {
-        delete graph[key];
-        graph[key2] = graph[key2].filter((el) => el !== key);
-      }
-    });
-  }
+  res += `${key}: ${content.join(" ")}\n`;
 });
 
-console.log(graph);
+console.log(Object.keys(graph).length);
 return;
 // const exploration = (start, end) => {
 //   let toExplore = new Set(graph[start]);
