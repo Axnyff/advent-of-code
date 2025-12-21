@@ -23,10 +23,10 @@ const findTarget = (finalTarget, possibles) => {
   let answer = 100000;
   const cache = {};
   const doFindTarget = (finalTarget, possibles) => {
-    const string = JSON.stringify([finalTarget, possibles]);
-    if (cache[string]) {
-      return cache[string];
-    }
+    // const string = JSON.stringify([finalTarget, possibles]);
+    // if (cache[string]) {
+    //   return cache[string];
+    // }
     if (finalTarget.every((el) => el === 0)) {
       return 0;
     }
@@ -48,13 +48,17 @@ const findTarget = (finalTarget, possibles) => {
       const newTarget = finalTarget.map((el) => el / 2);
       answer = Math.min(answer, 2 * doFindTarget(newTarget, possibles));
     }
-    cache[string] = answer;
     return answer;
   };
   return doFindTarget(finalTarget, possibles);
 };
 
+const cache = {};
 const findMatches = (target, possibles) => {
+  const string = JSON.stringify(target, possibles)
+  if (cache[string]) {
+    return string;
+  }
   let alls = [[]];
   for (let possible of possibles) {
     const newAlls = [];
@@ -78,6 +82,7 @@ const findMatches = (target, possibles) => {
       newAlls.push([result, all.length]);
     }
   }
+  cache[string] = newAlls;
   return newAlls;
 };
 
