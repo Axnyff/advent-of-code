@@ -15,22 +15,23 @@ def patterns(coeffs: list[tuple[int, ...]]) -> dict[tuple[int, ...], dict[tuple[
 
 def solve_single(coeffs: list[tuple[int, ...]], goal: tuple[int, ...]) -> int:
     pattern_costs = patterns(coeffs)
-    @cache
-    def solve_single_aux(goal: tuple[int, ...]) -> int:
-        if all(i == 0 for i in goal): return 0
+    print(goal)
+    def solve_single_aux(goal: tuple[int, ...], acc = None) -> int:
+        acc = acc or []
+        if all(i == 0 for i in goal):
+            print(acc)
+            return 0
         answer = 1000000
         for pattern, pattern_cost in pattern_costs[tuple(i%2 for i in goal)].items():
             if all(i <= j for i, j in zip(pattern, goal)):
                 new_goal = tuple((j - i)//2 for i, j in zip(pattern, goal))
-                sub = solve_single_aux(new_goal)
-                answer = min(answer, pattern_cost + 2 * solve_single_aux(new_goal))
-                print(goal, new_goal, pattern_cost, answer, sub)
+                answer = min(answer, pattern_cost + 2 * solve_single_aux(new_goal, acc=acc + [goal, new_goal]))
         return answer
     return solve_single_aux(goal)
 
 def solve(raw: str):
     score = 0
-    lines = raw.splitlines()
+    lines = raw.splitlines()[-1:]
     for I, L in enumerate(lines, 1):
         _, *coeffs, goal = L.split()
         goal = tuple(int(i) for i in goal[1:-1].split(","))
@@ -39,7 +40,6 @@ def solve(raw: str):
         subscore = solve_single(coeffs, goal)
         print(f'Line {I}/{len(lines)}: answer {subscore}')
         score += subscore
-        break
     print(score)
 
 solve(open('test-input').read())

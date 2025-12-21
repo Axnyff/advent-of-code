@@ -20,22 +20,30 @@ const lines = require("fs")
   });
 
 const findTarget = (finalTarget, possibles, acc = []) => {
-  const target = finalTarget.map((el) => el % 2).join("");
-  let matches = findMatches(target, possibles);
-
-  const result = [];
-  for (let [add, count] of matches.sort((a, b) => a.length - b.length)) {
-    const newTarget = finalTarget.map((el, i) => (el - add[i]) / 2);
-    console.log(newTarget, count)
-    // if (newTarget.some(el => el < 0)) {
-    //   continue;
-    // }
-    if (newTarget.every((el) => el === 0)) {
-      result.push([...acc, count])
+  let answer = 100000;
+  const doFindTarget = (finalTarget, possibles, acc = []) => {
+    if (finalTarget.every((el) => el === 0)) {
+      console.log(acc);
+      return 0;
     }
-    result.push(findTarget(newTarget, possibles, [...acc, count]));
-  }
-  return result;
+    const target = finalTarget.map((el) => el % 2).join("");
+    let matches = findMatches(target, possibles);
+
+    const result = [];
+    for (let [add, count] of matches.sort((a, b) => b.length - a.length)) {
+      const newTarget = finalTarget.map((el, i) => (el - add[i]) / 2);
+
+      if (newTarget.every((el) => el >= 0)) {
+        answer = Math.min(
+          answer,
+          count +
+            2 * doFindTarget(newTarget, possibles, [...acc, [finalTarget, newTarget]]),
+        );
+      }
+    }
+    return answer;
+  };
+  return doFindTarget(finalTarget, possibles);
 };
 
 const findMatches = (target, possibles) => {
@@ -48,7 +56,7 @@ const findMatches = (target, possibles) => {
     }
     alls = newAlls;
   }
-  alls = alls.filter(el => el.length !== 0)
+  alls = alls.filter((el) => el.length !== 0);
 
   const newAlls = [];
   for (let all of alls) {
@@ -66,7 +74,7 @@ const findMatches = (target, possibles) => {
 };
 
 let total = 0;
-for (let line of lines) {
+for (let line of lines.slice(2)) {
   const res = findTarget(line.target, line.possibles);
   console.log(JSON.stringify(res));
 }
