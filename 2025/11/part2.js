@@ -12,30 +12,35 @@ for (line of lines) {
 }
 
 Object.entries(graph).forEach(([key, content]) => {
-  console.log(key, content);
   if (content.length === 1) {
-
+    Object.keys(graph).forEach((key2) => {
+      if (graph[key2].includes(key)) {
+        delete graph[key];
+        graph[key2] = graph[key2].filter((el) => el !== key);
+      }
+    });
   }
 });
 
+console.log(graph);
 return;
-const exploration = (start, end) => {
-  let toExplore = new Set(graph[start]);
+// const exploration = (start, end) => {
+//   let toExplore = new Set(graph[start]);
 
-  let paths = 0;
-  while (toExplore.size) {
-    paths++;
-    const newToExplore = new Set();
-    for (let item of toExplore) {
-      for (let newPath of graph[item] || []) {
-        if (newPath === start) {
-          return paths;
-        }
-        newToExplore.add(newPath);
-      }
-      toExplore = newToExplore;
-    }
-  }
-  return paths;
-};
-console.log(exploration("svr", "out"));
+//   let paths = 0;
+//   while (toExplore.size) {
+//     paths++;
+//     const newToExplore = new Set();
+//     for (let item of toExplore) {
+//       for (let newPath of graph[item] || []) {
+//         if (newPath === start) {
+//           return paths;
+//         }
+//         newToExplore.add(newPath);
+//       }
+//       toExplore = newToExplore;
+//     }
+//   }
+//   return paths;
+// };
+// console.log(exploration("svr", "out"));
