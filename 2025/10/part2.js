@@ -1,5 +1,5 @@
 const lines = require("fs")
-  .readFileSync("test-input")
+  .readFileSync("input")
   .toString()
   .slice(0, -1)
   .split("\n")
@@ -19,30 +19,36 @@ const lines = require("fs")
     };
   });
 
-const findTarget = (finalTarget, possibles, acc = []) => {
+const findTarget = (finalTarget, possibles) => {
   let answer = 100000;
-  const doFindTarget = (finalTarget, possibles, acc = []) => {
+  const cache = {};
+  const doFindTarget = (finalTarget, possibles) => {
+    const string = JSON.stringify([finalTarget, possibles]);
+    if (cache[string]) {
+      return cache[string];
+    }
     if (finalTarget.every((el) => el === 0)) {
-      console.log(acc);
       return 0;
     }
     const target = finalTarget.map((el) => el % 2).join("");
     let matches = findMatches(target, possibles);
 
     const result = [];
-    console.log(matches);
-    return;
     for (let [add, count] of matches.sort((a, b) => b.length - a.length)) {
       const newTarget = finalTarget.map((el, i) => (el - add[i]) / 2);
 
       if (newTarget.every((el) => el >= 0)) {
         answer = Math.min(
           answer,
-          count +
-            2 * doFindTarget(newTarget, possibles, [...acc, [finalTarget, newTarget]]),
+          count + 2 * doFindTarget(newTarget, possibles),
         );
       }
     }
+    if (finalTarget.every((el) => el % 2 === 0)) {
+      const newTarget = finalTarget.map((el) => el / 2);
+      answer = Math.min(answer, 2 * doFindTarget(newTarget, possibles));
+    }
+    cache[string] = answer;
     return answer;
   };
   return doFindTarget(finalTarget, possibles);
@@ -76,8 +82,10 @@ const findMatches = (target, possibles) => {
 };
 
 let total = 0;
-for (let line of lines.slice(2)) {
+let count = 0;
+for (let line of lines) {
+  console.log(count++);
   const res = findTarget(line.target, line.possibles);
-  console.log(JSON.stringify(res));
+  total += res;
 }
 console.log(total);
