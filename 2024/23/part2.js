@@ -224,6 +224,9 @@ for (let start in connexions) {
                                 item7,
                                 item8,
                                 item9,
+                                item10,
+                                item11,
+                                item12,
                               ]
                                 .sort((a, b) => a.localeCompare(b))
                                 .join(","),
