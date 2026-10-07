@@ -8,15 +8,6 @@ const [raw_init, raw_op] = fs
 
 const data = {};
 
-raw_init.split("\n").forEach((l) => {
-  const [name, value] = l.split(": ");
-  //data[name] = Number(value);
-  if (name.endsWith("04")) {
-    data[name] = 1;
-  } else {
-    data[name] = 0;
-  }
-});
 
 const ops = raw_op.split("\n").map((l) => {
   const [a, op, b, _, dir] = l.split(" ");
@@ -33,7 +24,7 @@ const calculateValue = (index) => {
   raw_init.split("\n").forEach((l) => {
     const [name, value] = l.split(": ");
     //data[name] = Number(value);
-    if (name.endsWith(String(index).padLeft(0))) {
+    if (name.endsWith(String(index).padStart(2, "0"))) {
       data[name] = 1;
     } else {
       data[name] = 0;
@@ -41,6 +32,7 @@ const calculateValue = (index) => {
   });
 
 };
+calculateValue(4);
 
 let toBeCalculated = new Set(ops);
 while (toBeCalculated.size) {
