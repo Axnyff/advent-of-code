@@ -193,3 +193,19 @@ In this example, two pairs of gates have outputs that are involved in a swap. By
 Of course, your actual system is much more complex than this, and the gates that need their outputs swapped could be anywhere, not just attached to a wire starting with z. If you were to determine that you need to swap output wires aaa with eee, ooo with z99, bbb with ccc, and aoc with z24, your answer would be aaa,aoc,bbb,ccc,eee,ooo,z24,z99.
 
 Your system of gates and wires has four pairs of gates which need their output wires swapped - eight wires in total. Determine which four pairs of gates need their outputs swapped so that your system correctly performs addition; what do you get if you sort the names of the eight wires involved in a swap and then join those names with commas?
+
+
+
+x00 XOR y00 -> z00
+x00 AND y00 -> dhb
+
+x01 AND y01 -> pbr
+x01 XOR y01 -> qpp
+dhb XOR qpp -> z01
+dgb AND dhb -> ndg
+ndg OR  pbr -> vnb
+
+x02 AND y02 -> kng
+x02 XOR y02 -> phv
+vnb XOR phv -> z02
+kng OR rkh -> wtc

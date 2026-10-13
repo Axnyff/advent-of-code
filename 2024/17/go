@@ -1,0 +1,29 @@
+Register A: 60589763
+Register B: 0
+Register C: 0
+
+Program: 2,4,1,5,7,5,1,6,4,1,5,5,0,3,3,0
+Program: 
+2,4,
+1,5,
+7,5,
+1,6,
+4,1,
+5,5,
+0,3,
+3,0
+
+2 - 4 
+A modulo 8 dans B
+1 - 5
+B XOR 5 dans B
+7 - 5
+B prend A / 2 pow B
+1 - 6
+B XOR 5 dans B
+4 - 1
+B XOR C dans B
+5 - 5
+print B
+A / 8 dans A
+continue tant que A different zero

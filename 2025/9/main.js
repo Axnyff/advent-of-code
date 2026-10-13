@@ -1,5 +1,5 @@
 const positions = require("fs")
-  .readFileSync("input")
+  .readFileSync("test-input")
   .toString()
   .slice(0, -1)
   .split("\n")
