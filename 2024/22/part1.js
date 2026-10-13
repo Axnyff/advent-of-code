@@ -1,14 +1,14 @@
 const data = require("fs")
-  .readFileSync("test-input")
+  .readFileSync("input")
   .toString()
   .slice(0, -1)
   .split("\n")
   .map(Number);
 
 const next = (n) => {
-  const step1 = n ^ (n * 64);
-  const step2 = (Math.floor(step1 / 32) ^ step1) % 16777216;
-  const step3 = ((step2 * 2048) ^ step2) % 16777216;
+  const step1 = n ^ (n * 64n) % 16777216n;
+  const step2 = ((step1 / 32n) ^ step1) % 16777216n;
+  const step3 = ((step2 * 2048n) ^ step2) % 16777216n;
   return step3;
 };
 
@@ -20,8 +20,8 @@ const nNext = (n, amount) => {
   return start;
 };
 
-console.log(next(123, 3));
+let sum = 0n;
 for (let item of data) {
-  const newItem = nNext(item, 20);
-  console.log(newItem);
+  sum += nNext(BigInt(item), 2000)
 }
+console.log(sum);
