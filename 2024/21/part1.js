@@ -1,4 +1,5 @@
 const codes = ["029A", "980A", "179A", "456A", "379A"];
+const realCodes = ["341A", "480A", "286A", "579A", "149A"];
 
 const keypad = {
   7: [0, 0],
@@ -89,7 +90,7 @@ const computeScore = (codes) => {
   let total = 0;
   for (let code of codes) {
     const num = parseInt(code.replace(/A/g, "").replace(/^0*/, ""));
-    console.log(typeSecondCode(typeSecondCode(typeFirstCode(code))).join(""))
+    console.log(typeSecondCode(typeSecondCode(typeFirstCode(code))).join(""));
     const len = typeSecondCode(typeSecondCode(typeFirstCode(code))).length;
     console.log(num, len);
     total += len * num;
@@ -98,17 +99,17 @@ const computeScore = (codes) => {
 };
 
 const tokey = (x, y) => `${x}-${y}`;
-const unkey = k => k.split("-").map(Number)
+const unkey = (k) => k.split("-").map(Number);
 
 const getPath = (x, y) => {
   if (x === 1) {
-    return ">"
+    return ">";
   }
   if (x === -1) {
-    return "<"
+    return "<";
   }
   if (y === -1) {
-    return "^"
+    return "^";
   }
   return "v";
 };
@@ -121,12 +122,19 @@ const computePath = (start, end) => {
   while (toExplore.size) {
     let newToExplore = new Map();
     for (let [path, pos] of toExplore) {
-      let [x, y] = Object.entries(keypad).find(e => e[0] === pos)[1];
-      for (let [diffx, diffy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+      let [x, y] = Object.entries(keypad).find((e) => e[0] === pos)[1];
+      for (let [diffx, diffy] of [
+        [0, 1],
+        [0, -1],
+        [1, 0],
+        [-1, 0],
+      ]) {
         let newx = diffx + x;
         let newy = diffy + y;
 
-        const newPos = Object.entries(keypad).find(e => e[1][0] === newx && e[1][1] === newy);
+        const newPos = Object.entries(keypad).find(
+          (e) => e[1][0] === newx && e[1][1] === newy,
+        );
         if (newPos) {
           const newPath = path + getPath(diffx, diffy);
           if (newPos[0] === end) {
@@ -135,7 +143,6 @@ const computePath = (start, end) => {
             newToExplore.set(newPath, newPos[0]);
           }
         }
-
       }
     }
     toExplore = newToExplore;
@@ -153,12 +160,19 @@ const computePath2 = (start, end) => {
   while (toExplore.size) {
     let newToExplore = new Map();
     for (let [path, pos] of toExplore) {
-      let [x, y] = Object.entries(keypad2).find(e => e[0] === pos)[1];
-      for (let [diffx, diffy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+      let [x, y] = Object.entries(keypad2).find((e) => e[0] === pos)[1];
+      for (let [diffx, diffy] of [
+        [0, 1],
+        [0, -1],
+        [1, 0],
+        [-1, 0],
+      ]) {
         let newx = diffx + x;
         let newy = diffy + y;
 
-        const newPos = Object.entries(keypad2).find(e => e[1][0] === newx && e[1][1] === newy);
+        const newPos = Object.entries(keypad2).find(
+          (e) => e[1][0] === newx && e[1][1] === newy,
+        );
         if (newPos) {
           const newPath = path + getPath(diffx, diffy);
           if (newPos[0] === end) {
@@ -167,7 +181,6 @@ const computePath2 = (start, end) => {
             newToExplore.set(newPath, newPos[0]);
           }
         }
-
       }
     }
     toExplore = newToExplore;
@@ -181,9 +194,9 @@ const paths = {};
 for (let start of Object.keys(keypad)) {
   for (let end of Object.keys(keypad)) {
     if (start !== end) {
-      paths[start] = paths[start] || {}
+      paths[start] = paths[start] || {};
       paths[start][end] = computePath(start, end);
-      computePath
+      computePath;
     }
   }
 }
@@ -192,12 +205,12 @@ const paths2 = {};
 for (let start of Object.keys(keypad2)) {
   for (let end of Object.keys(keypad2)) {
     if (start !== end) {
-      paths2[start] = paths2[start] || {}
+      paths2[start] = paths2[start] || {};
       paths2[start][end] = computePath2(start, end);
-      computePath
+      computePath;
     } else {
-      paths2[start] = paths2[start] || {}
-      paths2[start][end] = [""]
+      paths2[start] = paths2[start] || {};
+      paths2[start][end] = [""];
     }
   }
 }
@@ -206,7 +219,7 @@ const getFirstCodes = (code) => {
   const trueCode = "A" + code;
   let possibles = [""];
   for (let i = 0; i < trueCode.length - 1; i++) {
-    let res = paths[trueCode[i]][trueCode[i+1]]
+    let res = paths[trueCode[i]][trueCode[i + 1]];
     let newPossibles = [];
     for (let possible of possibles) {
       for (let path of res) {
@@ -222,7 +235,7 @@ const getSecondCodes = (code) => {
   const trueCode = "A" + code;
   let possibles = [""];
   for (let i = 0; i < trueCode.length - 1; i++) {
-    let res = paths2[trueCode[i]][trueCode[i+1]]
+    let res = paths2[trueCode[i]][trueCode[i + 1]];
     let newPossibles = [];
     for (let possible of possibles) {
       for (let path of res) {
@@ -252,7 +265,7 @@ const getShortest = (code) => {
   for (let path of result2) {
     result3.push(...getSecondCodes(path));
   }
-  return Math.min(...result3.map(e => e.length))
+  return Math.min(...result3.map((e) => e.length));
 };
 
 console.log(getShortest(codes.at(-1)));
